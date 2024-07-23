@@ -23,6 +23,7 @@ class BLASTER_API ABlasterPlayerController : public APlayerController
 
 public:
 	ABlasterPlayerController();
+	virtual void OnPossess(APawn* InPawn) override;
 protected:
 	virtual void BeginPlay() override;
 	virtual void SetupInputComponent() override;
