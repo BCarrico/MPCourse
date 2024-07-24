@@ -27,6 +27,7 @@ public:
 	
 	void SetOverlappingWeapon(AWeapon* Weapon);
 	void EquipWeapon();
+	bool IsWeaponEquipped() const;
 protected:
 	
 	virtual void BeginPlay() override;

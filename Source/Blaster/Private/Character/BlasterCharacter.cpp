@@ -90,6 +90,11 @@ void ABlasterCharacter::EquipWeapon()
 	}
 }
 
+bool ABlasterCharacter::IsWeaponEquipped() const
+{
+	return (Combat && Combat->EquippedWeapon);
+}
+
 
 void ABlasterCharacter::ServerEquipButtonPressed_Implementation()
 {
