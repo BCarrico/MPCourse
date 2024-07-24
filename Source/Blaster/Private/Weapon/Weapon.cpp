@@ -14,7 +14,6 @@ AWeapon::AWeapon()
 	bReplicates = true;
 	
 	WeaponMesh = CreateDefaultSubobject<USkeletalMeshComponent>("WeaponMesh");
-	WeaponMesh->SetupAttachment(RootComponent);
 	SetRootComponent(WeaponMesh);
 	
 	WeaponMesh->SetCollisionResponseToAllChannels(ECR_Block);

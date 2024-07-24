@@ -21,8 +21,13 @@ public:
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 	void EquipWeapon(AWeapon* WeaponToEquip);
+	void SetAiming(bool bIsAiming);
 protected:
 	virtual void BeginPlay() override;
+
+	
+	UFUNCTION(Server, Reliable)
+	void ServerSetAiming(bool bIsAiming);
 
 private:
 
@@ -30,6 +35,9 @@ private:
 
 	UPROPERTY(Replicated)
 	AWeapon* EquippedWeapon;
+	
+	UPROPERTY(Replicated)
+	bool bAiming;
 
 
 

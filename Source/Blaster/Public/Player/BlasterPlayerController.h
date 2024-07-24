@@ -43,9 +43,17 @@ private:
 
 	UPROPERTY(EditAnywhere, Category="Input")
 	TObjectPtr<UInputAction> EquipAction;
+	
+	UPROPERTY(EditAnywhere, Category="Input")
+	TObjectPtr<UInputAction> CrouchAction;
+
+	UPROPERTY(EditAnywhere, Category="Input")
+	TObjectPtr<UInputAction> AimAction;
 
 	void Move(const FInputActionValue& InputActionValue);
 	void Look(const FInputActionValue& InputActionValue);
-	void Jump(const FInputActionValue& InputActionValue);
-	void Equip(const FInputActionValue& InputActionValue);
+	void JumpButtonPressed();
+	void EquipButtonPressed();
+	void CrouchButtonPressed();
+	void Aiming(const FInputActionValue& InputActionValue);
 };

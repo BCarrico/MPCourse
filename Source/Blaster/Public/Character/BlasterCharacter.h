@@ -24,10 +24,12 @@ public:
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override; // Must be overriden in any class where you plan on replicating variables. It is where you register variables to be replicated.
 	virtual void PostInitializeComponents() override;
+	UCombatComponent* GetCombatComponent() const;
 	
 	void SetOverlappingWeapon(AWeapon* Weapon);
 	void EquipWeapon();
 	bool IsWeaponEquipped() const;
+	bool IsAiming() const;
 protected:
 	
 	virtual void BeginPlay() override;

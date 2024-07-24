@@ -5,6 +5,7 @@
 #include "GameFramework/Character.h"
 #include "EnhancedInputSubsystems.h"
 #include "EnhancedInputComponent.h"
+#include "BlasterComponents/CombatComponent.h"
 #include "Character/BlasterCharacter.h"
 
 ABlasterPlayerController::ABlasterPlayerController()
@@ -47,8 +48,10 @@ void ABlasterPlayerController::SetupInputComponent()
 
 	EnhancedInputComponent->BindAction(MoveAction, ETriggerEvent::Triggered, this, &ABlasterPlayerController::Move);
 	EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &ABlasterPlayerController::Look);
-	EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Started, this, &ABlasterPlayerController::Jump);
-	EnhancedInputComponent->BindAction(EquipAction, ETriggerEvent::Triggered, this, &ABlasterPlayerController::Equip);
+	EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Started, this, &ABlasterPlayerController::JumpButtonPressed);
+	EnhancedInputComponent->BindAction(EquipAction, ETriggerEvent::Triggered, this, &ABlasterPlayerController::EquipButtonPressed);
+	EnhancedInputComponent->BindAction(CrouchAction, ETriggerEvent::Started, this, &ABlasterPlayerController::CrouchButtonPressed); // Also set as triggered in IA_Crouch due to stuttering in game. Fixed it
+	EnhancedInputComponent->BindAction(AimAction, ETriggerEvent::Triggered, this, &ABlasterPlayerController::Aiming); // See IA_Aiming for Pressed & Released
 }
 
 void ABlasterPlayerController::Move(const FInputActionValue& InputActionValue)
@@ -79,7 +82,7 @@ void ABlasterPlayerController::Look(const FInputActionValue& InputActionValue)
 	}
 }
 
-void ABlasterPlayerController::Jump(const FInputActionValue& InputActionValue)
+void ABlasterPlayerController::JumpButtonPressed()
 {
 	if (APawn* ControlledPawn = GetPawn<APawn>())
 	{
@@ -90,13 +93,47 @@ void ABlasterPlayerController::Jump(const FInputActionValue& InputActionValue)
 	}
 }
 
-void ABlasterPlayerController::Equip(const FInputActionValue& InputActionValue)
+void ABlasterPlayerController::EquipButtonPressed()
 {
 	if (APawn* ControlledPawn = GetPawn<APawn>())
 	{
 		if (ABlasterCharacter* BlasterCharacter = Cast<ABlasterCharacter>(ControlledPawn))
 		{
 			BlasterCharacter->EquipWeapon();
+		}
+	}
+}
+
+void ABlasterPlayerController::CrouchButtonPressed()
+{
+	if (APawn* ControlledPawn = GetPawn<APawn>())
+	{
+		if (ACharacter* BlasterCharacter = Cast<ACharacter>(ControlledPawn))
+		{
+			if (BlasterCharacter->bIsCrouched)
+			{
+				BlasterCharacter->UnCrouch();
+			}
+			else
+			{
+				BlasterCharacter->Crouch();
+			}
+		}
+	}
+}
+
+void ABlasterPlayerController::Aiming(const FInputActionValue& InputActionValue)
+{
+	bool IsAiming = InputActionValue.Get<bool>();
+
+	if (APawn* ControlledPawn = GetPawn<APawn>())
+	{
+		if (ABlasterCharacter* BlasterCharacter = Cast<ABlasterCharacter>(ControlledPawn))
+		{
+			if (UCombatComponent* CombatComponent = BlasterCharacter->GetCombatComponent())
+			{
+				CombatComponent->SetAiming(IsAiming);
+			}
 		}
 	}
 }
