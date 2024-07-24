@@ -5,6 +5,7 @@
 #include "GameFramework/Character.h"
 #include "EnhancedInputSubsystems.h"
 #include "EnhancedInputComponent.h"
+#include "Character/BlasterCharacter.h"
 
 ABlasterPlayerController::ABlasterPlayerController()
 {
@@ -47,6 +48,7 @@ void ABlasterPlayerController::SetupInputComponent()
 	EnhancedInputComponent->BindAction(MoveAction, ETriggerEvent::Triggered, this, &ABlasterPlayerController::Move);
 	EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &ABlasterPlayerController::Look);
 	EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Started, this, &ABlasterPlayerController::Jump);
+	EnhancedInputComponent->BindAction(EquipAction, ETriggerEvent::Triggered, this, &ABlasterPlayerController::Equip);
 }
 
 void ABlasterPlayerController::Move(const FInputActionValue& InputActionValue)
@@ -84,6 +86,17 @@ void ABlasterPlayerController::Jump(const FInputActionValue& InputActionValue)
 		if (ACharacter* BlasterCharacter = Cast<ACharacter>(ControlledPawn))
 		{
 			BlasterCharacter->Jump();
+		}
+	}
+}
+
+void ABlasterPlayerController::Equip(const FInputActionValue& InputActionValue)
+{
+	if (APawn* ControlledPawn = GetPawn<APawn>())
+	{
+		if (ABlasterCharacter* BlasterCharacter = Cast<ABlasterCharacter>(ControlledPawn))
+		{
+			BlasterCharacter->EquipWeapon();
 		}
 	}
 }
