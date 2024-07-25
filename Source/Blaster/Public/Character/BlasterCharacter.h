@@ -30,10 +30,12 @@ public:
 	void EquipWeapon();
 	bool IsWeaponEquipped() const;
 	bool IsAiming() const;
+	FORCEINLINE float GetAO_Yaw() const { return AO_Yaw;}
+	FORCEINLINE float GetAO_Pitch() const { return AO_Pitch;}
 protected:
 	
 	virtual void BeginPlay() override;
-
+	void AimOffset(float DeltaTime);
 private:
 	UPROPERTY(VisibleAnywhere, Category="Camera")
 	USpringArmComponent* CameraBoom;
@@ -55,4 +57,8 @@ private:
 	
 	UFUNCTION()
 	void OnRep_OverlappingWeapon(AWeapon* LastWeapon); // Rep notifies can only have input parameter of the type of variable being replicated
+	
+	float AO_Yaw;
+	float AO_Pitch;
+	FRotator StartingAimRotation;
 };
