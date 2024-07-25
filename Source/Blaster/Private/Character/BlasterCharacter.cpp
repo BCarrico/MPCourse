@@ -68,6 +68,12 @@ UCombatComponent* ABlasterCharacter::GetCombatComponent() const
 	return Combat;
 }
 
+AWeapon* ABlasterCharacter::GetEquippedWeapon()
+{
+	if (Combat == nullptr) return nullptr;
+	return Combat->EquippedWeapon;
+}
+
 void ABlasterCharacter::BeginPlay()
 {
 	Super::BeginPlay();
