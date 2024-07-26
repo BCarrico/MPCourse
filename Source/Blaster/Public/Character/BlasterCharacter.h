@@ -3,9 +3,11 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "BlasterTypes/TurningInPlace.h"
 #include "GameFramework/Character.h"
 #include "BlasterCharacter.generated.h"
 
+enum ETurningInPlace : uint8;
 class UCombatComponent;
 class AWeapon;
 class UWidgetComponent;
@@ -32,6 +34,7 @@ public:
 	bool IsAiming() const;
 	FORCEINLINE float GetAO_Yaw() const { return AO_Yaw;}
 	FORCEINLINE float GetAO_Pitch() const { return AO_Pitch;}
+	FORCEINLINE ETurningInPlace GetTurningInPlace() const { return TurningInPlace;}
 	AWeapon* GetEquippedWeapon();
 protected:
 	
@@ -58,6 +61,10 @@ private:
 	
 	UFUNCTION()
 	void OnRep_OverlappingWeapon(AWeapon* LastWeapon); // Rep notifies can only have input parameter of the type of variable being replicated
+
+	void TurnInPlace(float DeltaTime);
+	
+	TEnumAsByte<ETurningInPlace> TurningInPlace = ETurningInPlace::ETIP_NotTurning;
 	
 	float AO_Yaw;
 	float AO_Pitch;
