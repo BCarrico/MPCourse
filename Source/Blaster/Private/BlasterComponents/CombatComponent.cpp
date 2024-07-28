@@ -46,6 +46,17 @@ void UCombatComponent::SetAiming(bool bIsAiming)
 	}
 }
 
+void UCombatComponent::FireButtonPressed(bool bIsFiring)
+{
+	if (EquippedWeapon == nullptr) return;
+	if (Character && bIsFiring)
+	{
+		Character->PlayFireMontage(bAiming);
+		EquippedWeapon->Fire();
+	}
+	
+}
+
 void UCombatComponent::ServerSetAiming_Implementation(bool bIsAiming)
 {
 	bAiming = bIsAiming;

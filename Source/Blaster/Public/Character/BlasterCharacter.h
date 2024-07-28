@@ -36,6 +36,7 @@ public:
 	FORCEINLINE float GetAO_Pitch() const { return AO_Pitch;}
 	FORCEINLINE ETurningInPlace GetTurningInPlace() const { return TurningInPlace;}
 	AWeapon* GetEquippedWeapon();
+	void PlayFireMontage(bool bAiming);
 protected:
 	
 	virtual void BeginPlay() override;
@@ -57,6 +58,9 @@ private:
 
 	UPROPERTY(VisibleAnywhere)
 	UCombatComponent* Combat;
+
+	UPROPERTY(EditAnywhere, Category="Combat")
+	UAnimMontage* FireWeaponMontage;
 
 	UFUNCTION(Server, Reliable)
 	void ServerEquipButtonPressed();
