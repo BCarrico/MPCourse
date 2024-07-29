@@ -39,7 +39,6 @@ private:
 	FHUDPackage HUDPackage;
 
 	void DrawCrosshair(UTexture2D* Texture, FVector2d ViewportCenter, FVector2d Spread);
-
 	UPROPERTY(EditAnywhere)
 	float CrosshairSpreadMax = 16.f;
 	
