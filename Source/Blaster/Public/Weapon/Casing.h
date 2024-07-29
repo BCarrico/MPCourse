@@ -17,9 +17,25 @@ public:
 protected:
 	virtual void BeginPlay() override;
 	
+	UFUNCTION()
+	virtual void OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalInpulse, const FHitResult& Hit);
+	
 private:
 	UPROPERTY(VisibleAnywhere)
 	UStaticMeshComponent* CasingMesh;
 	
+	UPROPERTY(EditAnywhere)
+	float ShellEjectionImpulse = 10.f;
 
+	UPROPERTY(EditAnywhere)
+	USoundCue* ShellSound;
+
+	bool bShellSoundPlayed = false;
+
+	UPROPERTY(EditAnywhere)
+	float ShellDestroyDelayTime = 3.f;
+
+	FTimerHandle ShellDestroyTimerHandle;
+
+	void DestroyShell();
 };
