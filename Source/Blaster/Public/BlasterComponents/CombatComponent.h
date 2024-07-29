@@ -6,7 +6,7 @@
 #include "Components/ActorComponent.h"
 #include "CombatComponent.generated.h"
 
-
+#define TRACE_LENGTH 80000;
 class AWeapon;
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
@@ -25,21 +25,20 @@ public:
 	void FireButtonPressed(bool bIsFiring);
 protected:
 	virtual void BeginPlay() override;
-
 	
 	UFUNCTION(Server, Reliable)
 	void ServerSetAiming(bool bIsAiming);
 
 	UFUNCTION()
 	void OnRep_EquippedWeapon();
-
-
-
+	
 	UFUNCTION(Server, Reliable)
 	void ServerFire();
 
 	UFUNCTION(NetMulticast, Reliable)
 	void MulticastFire();
+
+	void TraceUnderCrosshairs(FHitResult& TraceHitResult);
 private:
 
 	ABlasterCharacter* Character;
@@ -55,6 +54,8 @@ private:
 	
 	UPROPERTY(EditAnywhere)
 	float AimWalkSpeed = 450.f;
+
+	FVector HitTarget;
 
 
 
