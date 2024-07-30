@@ -3,6 +3,7 @@
 
 #include "Character/BlasterCharacter.h"
 
+#include "Blaster/Blaster.h"
 #include "BlasterComponents/CombatComponent.h"
 #include "BlasterTypes/TurningInPlace.h"
 #include "Camera/CameraComponent.h"
@@ -40,6 +41,7 @@ ABlasterCharacter::ABlasterCharacter()
 
 	GetCharacterMovement()->NavAgentProps.bCanCrouch = true;
 	GetCapsuleComponent()->SetCollisionResponseToChannel(ECC_Camera, ECR_Ignore);
+	GetMesh()->SetCollisionObjectType(ECC_SkeletalMesh);
 	GetMesh()->SetCollisionResponseToChannel(ECC_Camera, ECR_Ignore);
 	GetMesh()->SetCollisionResponseToChannel(ECC_Visibility, ECR_Block);
 	NetUpdateFrequency = 66.f;  // COMMON values for fast-paced games
@@ -89,6 +91,19 @@ void ABlasterCharacter::PlayFireMontage(bool bAiming)
 	{
 		AnimInstance->Montage_Play(FireWeaponMontage);
 		FName SectionName = bAiming ? FName("RifleAim") : FName("RifleHip");
+		AnimInstance->Montage_JumpToSection(SectionName);
+	}
+}
+
+void ABlasterCharacter::PlayHitReactMontage()
+{
+	if (Combat == nullptr || Combat->EquippedWeapon == nullptr) return;
+
+	UAnimInstance* AnimInstance = GetMesh()->GetAnimInstance();
+	if (AnimInstance && HitReactMontage)
+	{
+		AnimInstance->Montage_Play(HitReactMontage);
+		FName SectionName = FName("FromFront");
 		AnimInstance->Montage_JumpToSection(SectionName);
 	}
 }
@@ -197,6 +212,11 @@ void ABlasterCharacter::HideCameraIfCharacterClose()
 			Combat->EquippedWeapon->GetWeaponMesh()->bOwnerNoSee = false;
 		}
 	}
+}
+
+void ABlasterCharacter::MulticastHit_Implementation()
+{
+	PlayHitReactMontage();
 }
 
 void ABlasterCharacter::SetOverlappingWeapon(AWeapon* Weapon)

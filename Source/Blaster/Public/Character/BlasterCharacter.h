@@ -40,13 +40,17 @@ public:
 	FORCEINLINE UCameraComponent* GetFollowCamera() const{return FollowCamera;}
 	AWeapon* GetEquippedWeapon();
 	void PlayFireMontage(bool bAiming);
+	
+	UFUNCTION(NetMulticast, Unreliable)
+	void MulticastHit();
+	
 	FVector GetHitTarget() const;
 protected:
 	
 	virtual void BeginPlay() override;
 	void AimOffset(float DeltaTime);
 	virtual void Jump() override;
-	
+	void PlayHitReactMontage();
 private:
 	UPROPERTY(VisibleAnywhere, Category="Camera")
 	USpringArmComponent* CameraBoom;
@@ -65,6 +69,9 @@ private:
 
 	UPROPERTY(EditAnywhere, Category="Combat")
 	UAnimMontage* FireWeaponMontage;
+
+	UPROPERTY(EditAnywhere, Category="Combat")
+	UAnimMontage* HitReactMontage;
 
 	UFUNCTION(Server, Reliable)
 	void ServerEquipButtonPressed();
