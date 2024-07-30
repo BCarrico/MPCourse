@@ -66,7 +66,9 @@ private:
 	
 	float CrosshairVelocityFactor;
 	float CrosshairInAirFactor;
-
+	float CrosshairAimFactor;
+	float CrosshairShootingFactor;
+	
 	// Aiming and FOV
 
 	// Field of view when not aiming; set to the camera's base FOV in BeginPlay
