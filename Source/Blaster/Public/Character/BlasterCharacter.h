@@ -35,6 +35,7 @@ public:
 	FORCEINLINE float GetAO_Yaw() const { return AO_Yaw;}
 	FORCEINLINE float GetAO_Pitch() const { return AO_Pitch;}
 	FORCEINLINE ETurningInPlace GetTurningInPlace() const { return TurningInPlace;}
+	FORCEINLINE UCameraComponent* GetFollowCamera() const{return FollowCamera;}
 	AWeapon* GetEquippedWeapon();
 	void PlayFireMontage(bool bAiming);
 	FVector GetHitTarget() const;
