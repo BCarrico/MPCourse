@@ -41,8 +41,8 @@ ABlasterCharacter::ABlasterCharacter()
 	GetCharacterMovement()->NavAgentProps.bCanCrouch = true;
 	GetCapsuleComponent()->SetCollisionResponseToChannel(ECC_Camera, ECR_Ignore);
 	GetMesh()->SetCollisionResponseToChannel(ECC_Camera, ECR_Ignore);
-
-	NetUpdateFrequency = 66.f;  // COMMON values for fast paced games
+	GetMesh()->SetCollisionResponseToChannel(ECC_Visibility, ECR_Block);
+	NetUpdateFrequency = 66.f;  // COMMON values for fast-paced games
 	MinNetUpdateFrequency = 33.f;
 	
 }
