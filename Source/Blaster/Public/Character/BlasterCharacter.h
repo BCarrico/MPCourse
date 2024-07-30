@@ -28,6 +28,7 @@ public:
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override; // Must be overriden in any class where you plan on replicating variables. It is where you register variables to be replicated.
 	virtual void PostInitializeComponents() override;
+	virtual void OnRep_ReplicatedMovement() override;
 	UCombatComponent* GetCombatComponent() const;
 	
 	void SetOverlappingWeapon(AWeapon* Weapon);
@@ -38,6 +39,7 @@ public:
 	FORCEINLINE float GetAO_Pitch() const { return AO_Pitch;}
 	FORCEINLINE ETurningInPlace GetTurningInPlace() const { return TurningInPlace;}
 	FORCEINLINE UCameraComponent* GetFollowCamera() const{return FollowCamera;}
+	FORCEINLINE bool ShouldRotateRootBone() const {return bRotateRootBone;}
 	AWeapon* GetEquippedWeapon();
 	void PlayFireMontage(bool bAiming);
 	
@@ -48,7 +50,10 @@ public:
 protected:
 	
 	virtual void BeginPlay() override;
+	void CalculateAO_Pitch();
+	float CalculateSpeed();
 	void AimOffset(float DeltaTime);
+	void SimProxiesTurn();
 	virtual void Jump() override;
 	void PlayHitReactMontage();
 private:
@@ -92,4 +97,10 @@ private:
 	float InterpAO_Yaw;
 	float AO_Pitch;
 	FRotator StartingAimRotation;
+	bool bRotateRootBone;
+	float TurnThreshold = 0.5f;
+	FRotator ProxyRotationLastFrame;
+	FRotator ProxyRotation;
+	float ProxyYaw;
+	float TimeSinceLastMovementReplication;
 };
