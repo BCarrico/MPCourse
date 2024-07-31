@@ -25,6 +25,7 @@ public:
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 	void EquipWeapon(AWeapon* WeaponToEquip);
 	void SetAiming(bool bIsAiming);
+	void Fire();
 	void FireButtonPressed(bool bIsFiring);
 protected:
 	virtual void BeginPlay() override;
@@ -54,6 +55,8 @@ private:
 	
 	UPROPERTY(Replicated)
 	bool bAiming;
+
+	bool bFireButtonPressed;
 
 	UPROPERTY(EditAnywhere)
 	float BaseWalkSpeed = 600.f;
@@ -85,6 +88,12 @@ private:
 
 	void InterpFOV(float DeltaTime);
 
+	// Automatic Fire
 
-		
+	FTimerHandle FireTimer;
+	void FireTimerFinished();
+	void StartFireTimer();
+
+	bool bCanFire = true;
+
 };
