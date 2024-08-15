@@ -32,6 +32,7 @@ public:
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override; // Must be overriden in any class where you plan on replicating variables. It is where you register variables to be replicated.
 	virtual void PostInitializeComponents() override;
 	virtual void OnRep_ReplicatedMovement() override;
+	virtual void Destroyed() override;
 	UCombatComponent* GetCombatComponent() const;
 	
 	void SetOverlappingWeapon(AWeapon* Weapon);
@@ -44,6 +45,8 @@ public:
 	FORCEINLINE UCameraComponent* GetFollowCamera() const{return FollowCamera;}
 	FORCEINLINE bool ShouldRotateRootBone() const {return bRotateRootBone;}
 	FORCEINLINE bool IsEliminated() const {return bEliminated;}
+	FORCEINLINE float GetHealth() const {return Health;}
+	FORCEINLINE float GetMaxHealth() const {return MaxHealth;}
 	AWeapon* GetEquippedWeapon();
 	void PlayFireMontage(bool bAiming);
 	void PlayElimMontage();
@@ -163,4 +166,15 @@ private:
 	// Material instance set on the Blueprint, used with dynamic material instance
 	UPROPERTY(EditAnywhere, Category="Elim")
 	UMaterialInstance* DissolveMaterialInstance;
+
+	// Elim bot
+
+	UPROPERTY(EditAnywhere)
+	UParticleSystem* ElimBotEffect;
+
+	UPROPERTY(VisibleAnywhere)
+	UParticleSystemComponent* ElimBotComponent;
+	
+	UPROPERTY(EditAnywhere)
+	USoundCue* ElimBotSound;
 };

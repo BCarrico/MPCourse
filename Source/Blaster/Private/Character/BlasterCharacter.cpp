@@ -2,7 +2,7 @@
 
 
 #include "Character/BlasterCharacter.h"
-
+#include "Sound/SoundCue.h"
 #include "Blaster/Blaster.h"
 #include "BlasterComponents/CombatComponent.h"
 #include "BlasterTypes/TurningInPlace.h"
@@ -12,8 +12,10 @@
 #include "Game/BlasterGameMode.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/SpringArmComponent.h"
+#include "Kismet/GameplayStatics.h"
 #include "Kismet/KismetMathLibrary.h"
 #include "Net/UnrealNetwork.h"
+#include "Particles/ParticleSystemComponent.h"
 #include "Player/BlasterPlayerController.h"
 #include "Weapon/Weapon.h"
 
@@ -82,6 +84,16 @@ void ABlasterCharacter::OnRep_ReplicatedMovement()
 	Super::OnRep_ReplicatedMovement();
 	SimProxiesTurn();
 	TimeSinceLastMovementReplication = 0.f;
+}
+
+void ABlasterCharacter::Destroyed()
+{
+	Super::Destroyed();
+	if (ElimBotComponent)
+	{
+		ElimBotComponent->DestroyComponent();
+	}
+	
 }
 
 UCombatComponent* ABlasterCharacter::GetCombatComponent() const
@@ -153,6 +165,17 @@ void ABlasterCharacter::MulticastElim_Implementation()
 	// Disable collision
 	GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::Type::NoCollision);
 	GetMesh()->SetCollisionEnabled(ECollisionEnabled::Type::NoCollision);
+
+	// Spawn Elim Bot
+	if (ElimBotEffect)
+	{
+		FVector ElimBotSpawnPoint = FVector(GetActorLocation().X, GetActorLocation().Y, GetActorLocation().Z + 200.f);
+		ElimBotComponent = UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), ElimBotEffect, ElimBotSpawnPoint, GetActorRotation());
+	}
+	if (ElimBotSound)
+	{
+		UGameplayStatics::SpawnSoundAtLocation(this, ElimBotSound, GetActorLocation());
+	}
 }
 
 void ABlasterCharacter::ElimTimerFinished()
@@ -305,8 +328,7 @@ void ABlasterCharacter::SimProxiesTurn()
 	ProxyRotationLastFrame = ProxyRotation;
 	ProxyRotation = GetActorRotation();
 	ProxyYaw = UKismetMathLibrary::NormalizedDeltaRotator(ProxyRotation, ProxyRotationLastFrame).Yaw;
-
-	UE_LOG(LogTemp, Warning, TEXT("ProxyYaw: %f"), ProxyYaw);
+	
 	if (FMath::Abs(ProxyYaw) > TurnThreshold)
 	{
 		if (ProxyYaw > TurnThreshold)
