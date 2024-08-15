@@ -43,7 +43,7 @@ public:
 	FORCEINLINE bool ShouldRotateRootBone() const {return bRotateRootBone;}
 	AWeapon* GetEquippedWeapon();
 	void PlayFireMontage(bool bAiming);
-	
+	void Elim();
 	
 	FVector GetHitTarget() const;
 	
