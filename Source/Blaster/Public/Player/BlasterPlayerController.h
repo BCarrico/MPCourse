@@ -7,6 +7,7 @@
 #include "GameFramework/PlayerController.h"
 #include "BlasterPlayerController.generated.h"
 
+class ABlasterHUD;
 struct FInputActionValue;
 class UInputMappingContext;
 class UInputAction;
@@ -24,11 +25,17 @@ class BLASTER_API ABlasterPlayerController : public APlayerController
 public:
 	ABlasterPlayerController();
 	virtual void OnPossess(APawn* InPawn) override;
+
+	void SetHUDHealth(float Health, float MaxHealth);
 protected:
 	virtual void BeginPlay() override;
 	virtual void SetupInputComponent() override;
 
 private:
+
+	UPROPERTY()
+	ABlasterHUD* BlasterHUD;
+	
 	UPROPERTY(EditAnywhere, Category="Input")
 	TObjectPtr<UInputMappingContext> BlasterContext;
 

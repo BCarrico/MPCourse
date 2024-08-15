@@ -47,6 +47,7 @@ void AProjectile::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimi
 {
 	if (ABlasterCharacter* BlasterCharacter = Cast<ABlasterCharacter>(OtherActor))
 	{
+		bIsEnemy = true;
 		BlasterCharacter->MulticastHit();
 	}
 	Destroy();
@@ -60,9 +61,13 @@ void AProjectile::Tick(float DeltaTime)
 void AProjectile::Destroyed()
 {
 	Super::Destroyed();
-	if (ImpactParticles)
+	if (bIsEnemy && ImpactParticlesEnemy)
 	{
-		UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), ImpactParticles, GetActorTransform());
+		UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), ImpactParticlesEnemy, GetActorTransform());
+	}
+	if (!bIsEnemy && ImpactParticlesBase)
+	{
+		UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), ImpactParticlesBase, GetActorTransform());
 	}
 	if (ImpactSound)
 	{

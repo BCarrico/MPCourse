@@ -37,8 +37,13 @@ private:
 	UParticleSystemComponent* TracerComponent;
 
 	UPROPERTY(EditAnywhere)
-	UParticleSystem* ImpactParticles;
+	UParticleSystem* ImpactParticlesEnemy;
+
+	UPROPERTY(EditAnywhere)
+	UParticleSystem* ImpactParticlesBase;
 
 	UPROPERTY(EditAnywhere)
 	USoundCue* ImpactSound;
+
+	bool bIsEnemy;
 };
