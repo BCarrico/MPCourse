@@ -117,19 +117,35 @@ void ABlasterCharacter::PlayHitReactMontage()
 	}
 }
 
+void ABlasterCharacter::ReceiveDamage(AActor* DamagedActor, float Damage, const UDamageType* DamageType, AController* InstigatorController, AActor* DamageCauser)
+{
+	Health = FMath::Clamp(Health - Damage, 0.f, MaxHealth);
+	UpdateHudHealth();
+	PlayHitReactMontage();
+}
+
 FVector ABlasterCharacter::GetHitTarget() const
 {
 	if (Combat == nullptr) return FVector();
 	return Combat->HitTarget;
 }
 
-void ABlasterCharacter::BeginPlay()
+void ABlasterCharacter::UpdateHudHealth()
 {
-	Super::BeginPlay();
-	BlasterPlayerController = Cast<ABlasterPlayerController>(Controller);
+	BlasterPlayerController = BlasterPlayerController == nullptr ? Cast<ABlasterPlayerController>(Controller) : BlasterPlayerController;
 	if (BlasterPlayerController)
 	{
 		BlasterPlayerController->SetHUDHealth(Health, MaxHealth);
+	}
+}
+
+void ABlasterCharacter::BeginPlay()
+{
+	Super::BeginPlay();
+	UpdateHudHealth();
+	if (HasAuthority())
+	{
+		OnTakeAnyDamage.AddDynamic(this, &ABlasterCharacter::ReceiveDamage);
 	}
 }
 
@@ -278,11 +294,7 @@ void ABlasterCharacter::HideCameraIfCharacterClose()
 
 void ABlasterCharacter::OnRep_Health()
 {
-	
-}
-
-void ABlasterCharacter::MulticastHit_Implementation()
-{
+	UpdateHudHealth();
 	PlayHitReactMontage();
 }
 

@@ -44,10 +44,10 @@ public:
 	AWeapon* GetEquippedWeapon();
 	void PlayFireMontage(bool bAiming);
 	
-	UFUNCTION(NetMulticast, Unreliable)
-	void MulticastHit();
 	
 	FVector GetHitTarget() const;
+	
+
 protected:
 	
 	virtual void BeginPlay() override;
@@ -57,6 +57,10 @@ protected:
 	void SimProxiesTurn();
 	virtual void Jump() override;
 	void PlayHitReactMontage();
+	void UpdateHudHealth();
+	
+	UFUNCTION()
+	void ReceiveDamage(AActor* DamagedActor, float Damage, const UDamageType* DamageType, class AController* InstigatorController, AActor* DamageCauser);
 private:
 	UPROPERTY(VisibleAnywhere, Category="Camera")
 	USpringArmComponent* CameraBoom;
@@ -113,7 +117,8 @@ private:
 	UPROPERTY(ReplicatedUsing= OnRep_Health, VisibleAnywhere, Category="Player Stats")
 	float Health = 100.f;
 
-	TObjectPtr<ABlasterPlayerController> BlasterPlayerController;
+	UPROPERTY()
+	ABlasterPlayerController* BlasterPlayerController;
 
 	UFUNCTION()
 	void OnRep_Health();

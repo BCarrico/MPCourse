@@ -23,6 +23,9 @@ protected:
 
 	UFUNCTION()
 	virtual void OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalInpulse, const FHitResult& Hit);
+
+	UPROPERTY(EditAnywhere)
+	float Damage = 20.f;
 private:
 	UPROPERTY(EditAnywhere)
 	UBoxComponent* CollisionBox;
@@ -46,4 +49,6 @@ private:
 	USoundCue* ImpactSound;
 
 	bool bIsEnemy;
+
+
 };
