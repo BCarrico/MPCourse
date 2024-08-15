@@ -105,9 +105,19 @@ void ABlasterCharacter::PlayFireMontage(bool bAiming)
 	}
 }
 
-void ABlasterCharacter::Elim()
+void ABlasterCharacter::PlayElimMontage()
 {
-	
+	UAnimInstance* AnimInstance = GetMesh()->GetAnimInstance();
+	if (AnimInstance && ElimMontage)
+	{
+		AnimInstance->Montage_Play(ElimMontage);
+	}
+}
+
+void ABlasterCharacter::Elim_Implementation()
+{
+	bEliminated = true;
+	PlayElimMontage();
 }
 
 void ABlasterCharacter::PlayHitReactMontage()

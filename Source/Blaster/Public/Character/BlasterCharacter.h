@@ -41,8 +41,12 @@ public:
 	FORCEINLINE ETurningInPlace GetTurningInPlace() const { return TurningInPlace;}
 	FORCEINLINE UCameraComponent* GetFollowCamera() const{return FollowCamera;}
 	FORCEINLINE bool ShouldRotateRootBone() const {return bRotateRootBone;}
+	FORCEINLINE bool IsEliminated() const {return bEliminated;}
 	AWeapon* GetEquippedWeapon();
 	void PlayFireMontage(bool bAiming);
+	void PlayElimMontage();
+	
+	UFUNCTION(NetMulticast, Reliable)
 	void Elim();
 	
 	FVector GetHitTarget() const;
@@ -57,6 +61,7 @@ protected:
 	void SimProxiesTurn();
 	virtual void Jump() override;
 	void PlayHitReactMontage();
+
 	void UpdateHudHealth();
 	
 	UFUNCTION()
@@ -82,6 +87,9 @@ private:
 
 	UPROPERTY(EditAnywhere, Category="Combat")
 	UAnimMontage* HitReactMontage;
+
+	UPROPERTY(EditAnywhere, Category="Combat")
+	UAnimMontage* ElimMontage;
 
 	UFUNCTION(Server, Reliable)
 	void ServerEquipButtonPressed();
@@ -122,4 +130,6 @@ private:
 
 	UFUNCTION()
 	void OnRep_Health();
+
+	bool bEliminated = false;
 };
