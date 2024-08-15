@@ -47,6 +47,8 @@ public:
 	void PlayElimMontage();
 	
 	UFUNCTION(NetMulticast, Reliable)
+	void MulticastElim();
+
 	void Elim();
 	
 	FVector GetHitTarget() const;
@@ -132,4 +134,11 @@ private:
 	void OnRep_Health();
 
 	bool bEliminated = false;
+
+	FTimerHandle ElimTimer;
+	
+	UPROPERTY(EditDefaultsOnly)
+	float ElimDelay = 3.f;
+	
+	void ElimTimerFinished();
 };
