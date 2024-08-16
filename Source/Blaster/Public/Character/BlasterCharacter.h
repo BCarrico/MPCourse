@@ -51,6 +51,7 @@ public:
 	AWeapon* GetEquippedWeapon();
 	void PlayFireMontage(bool bAiming);
 	void PlayElimMontage();
+	void PlayReloadMontage();
 	
 	UFUNCTION(NetMulticast, Reliable)
 	void MulticastElim();
@@ -93,6 +94,7 @@ private:
 	UPROPERTY(VisibleAnywhere)
 	UCombatComponent* Combat;
 
+	// Animation Montages
 	UPROPERTY(EditAnywhere, Category="Combat")
 	UAnimMontage* FireWeaponMontage;
 
@@ -101,6 +103,9 @@ private:
 
 	UPROPERTY(EditAnywhere, Category="Combat")
 	UAnimMontage* ElimMontage;
+	
+	UPROPERTY(EditAnywhere, Category="Combat")
+	UAnimMontage* ReloadMontage;
 
 	UFUNCTION(Server, Reliable)
 	void ServerEquipButtonPressed();

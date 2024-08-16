@@ -135,6 +135,7 @@ void ABlasterPlayerController::SetupInputComponent()
 	EnhancedInputComponent->BindAction(CrouchAction, ETriggerEvent::Started, this, &ABlasterPlayerController::CrouchButtonPressed); // Also set as triggered in IA_Crouch due to stuttering in game. Fixed it
 	EnhancedInputComponent->BindAction(AimAction, ETriggerEvent::Triggered, this, &ABlasterPlayerController::Aiming); // See IA_Aiming for Pressed & Released
 	EnhancedInputComponent->BindAction(FireAction, ETriggerEvent::Triggered, this, &ABlasterPlayerController::FireButtonPressed);
+	EnhancedInputComponent->BindAction(ReloadAction, ETriggerEvent::Triggered, this, &ABlasterPlayerController::ReloadButtonPressed);
 }
 
 void ABlasterPlayerController::Move(const FInputActionValue& InputActionValue)
@@ -231,6 +232,20 @@ void ABlasterPlayerController::FireButtonPressed(const FInputActionValue& InputA
 			if (UCombatComponent* CombatComponent = BlasterCharacter->GetCombatComponent())
 			{
 				CombatComponent->FireButtonPressed(IsFiring);
+			}
+		}
+	}
+}
+
+void ABlasterPlayerController::ReloadButtonPressed()
+{
+	if (APawn* ControlledPawn = GetPawn<APawn>())
+	{
+		if (ABlasterCharacter* BlasterCharacter = Cast<ABlasterCharacter>(ControlledPawn))
+		{
+			if (UCombatComponent* CombatComponent = BlasterCharacter->GetCombatComponent())
+			{
+				CombatComponent->Reload();
 			}
 		}
 	}

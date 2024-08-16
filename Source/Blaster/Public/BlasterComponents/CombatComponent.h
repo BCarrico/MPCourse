@@ -28,6 +28,7 @@ public:
 	void SetAiming(bool bIsAiming);
 	void Fire();
 	void FireButtonPressed(bool bIsFiring);
+	void Reload();
 protected:
 	virtual void BeginPlay() override;
 	
@@ -45,6 +46,9 @@ protected:
 
 	void TraceUnderCrosshairs(FHitResult& TraceHitResult);
 	void SetHUDCrosshairs(float DeltaTime);
+
+	UFUNCTION(Server, Reliable)
+	void ServerReload();
 private:
 
 	ABlasterCharacter* Character;
