@@ -143,7 +143,7 @@ void UCombatComponent::SetAiming(bool bIsAiming)
 
 void UCombatComponent::Fire()
 {
-	if (bCanFire)
+	if (CanFire())
 	{
 		bCanFire = false;
 		ServerFire(HitTarget);
@@ -156,6 +156,12 @@ void UCombatComponent::StartFireTimer()
 {
 	if (EquippedWeapon == nullptr || Character == nullptr) return;
 	Character->GetWorldTimerManager().SetTimer(FireTimer, this, &UCombatComponent::FireTimerFinished, EquippedWeapon->FireDelay);
+}
+
+bool UCombatComponent::CanFire()
+{
+	if (EquippedWeapon == nullptr) return false;
+	return !EquippedWeapon->IsEmpty() || !bCanFire;
 }
 
 void UCombatComponent::FireTimerFinished()

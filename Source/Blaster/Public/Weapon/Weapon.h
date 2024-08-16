@@ -65,6 +65,7 @@ public:
 	float FireDelay = .15f;
 	
 	void SetHUDAmmo();
+	bool IsEmpty();
 protected:
 	virtual void BeginPlay() override;
 
@@ -109,6 +110,8 @@ private:
 
 	void SpendRound();
 
+
+	
 	UPROPERTY(EditAnywhere)
 	int32 MagCapacity;
 	
