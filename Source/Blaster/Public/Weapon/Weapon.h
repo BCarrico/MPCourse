@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "WeaponType.h"
 #include "GameFramework/Actor.h"
 #include "Weapon.generated.h"
 
@@ -39,6 +40,7 @@ public:
 	FORCEINLINE USkeletalMeshComponent* GetWeaponMesh() const {return WeaponMesh;}
 	FORCEINLINE float GetZoomedFOV() const{return ZoomedFOV;}
 	FORCEINLINE float GetZoomInterpSpeed() const{return ZoomInterpSpeed;}
+	FORCEINLINE EWeaponType GetWeaponType() const {return WeaponType;}
 	// Textures for the weapon crosshairs
 
 	UPROPERTY(EditAnywhere, Category="Crosshairs")
@@ -110,7 +112,8 @@ private:
 
 	void SpendRound();
 
-
+	UPROPERTY(EditAnywhere)
+	EWeaponType WeaponType;
 	
 	UPROPERTY(EditAnywhere)
 	int32 MagCapacity;
