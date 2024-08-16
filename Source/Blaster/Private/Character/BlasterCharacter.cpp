@@ -17,6 +17,7 @@
 #include "Net/UnrealNetwork.h"
 #include "Particles/ParticleSystemComponent.h"
 #include "Player/BlasterPlayerController.h"
+#include "PlayerState/BlasterPlayerState.h"
 #include "Weapon/Weapon.h"
 
 
@@ -143,7 +144,11 @@ void ABlasterCharacter::MulticastElim_Implementation()
 {
 	bEliminated = true;
 	PlayElimMontage();
-
+	BlasterPlayerController = BlasterPlayerController == nullptr ? Cast<ABlasterPlayerController>(Controller) : BlasterPlayerController;
+	if (BlasterPlayerController)
+	{
+		BlasterPlayerController->ShowEliminatedMessage(true);
+	}
 	// Start Dissolve Effect
 	if (DissolveMaterialInstance)
 	{
@@ -249,6 +254,19 @@ void ABlasterCharacter::UpdateHudHealth()
 	if (BlasterPlayerController)
 	{
 		BlasterPlayerController->SetHUDHealth(Health, MaxHealth);
+	}
+}
+
+void ABlasterCharacter::PollInit()
+{
+	if (BlasterPlayerState == nullptr)
+	{
+		BlasterPlayerState = GetPlayerState<ABlasterPlayerState>();
+		if (BlasterPlayerState)
+		{
+			BlasterPlayerState->AddToScore(0.f);
+			BlasterPlayerState->AddToDefeats(0);
+		}
 	}
 }
 
@@ -485,6 +503,7 @@ void ABlasterCharacter::Tick(float DeltaTime)
 		CalculateAO_Pitch();
 	}
 	HideCameraIfCharacterClose();
+	PollInit();
 }
 
 

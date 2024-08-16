@@ -90,6 +90,7 @@ private:
 	UPROPERTY(EditAnywhere)
 	TSubclassOf<ACasing> CasingClass;
 
+	
 	// Zoomed FOV while aiming
 
 	UPROPERTY(EditAnywhere)

@@ -45,6 +45,45 @@ void ABlasterPlayerController::SetHUDHealth(float Health, float MaxHealth)
 	}
 }
 
+void ABlasterPlayerController::SetHUDScore(float Score)
+{
+	BlasterHUD = BlasterHUD == nullptr ? Cast<ABlasterHUD>(GetHUD()) : BlasterHUD;
+	if (BlasterHUD && BlasterHUD->CharacterOverlay && BlasterHUD->CharacterOverlay->HealthBar && BlasterHUD->CharacterOverlay->ScoreAmount)
+	{
+		FString ScoreText = FString::Printf(TEXT("%d"), FMath::FloorToInt(Score));
+		BlasterHUD->CharacterOverlay->ScoreAmount->SetText(FText::FromString(ScoreText));
+	}
+}
+
+void ABlasterPlayerController::SetHUDDefeats(int32 Defeats)
+{
+	BlasterHUD = BlasterHUD == nullptr ? Cast<ABlasterHUD>(GetHUD()) : BlasterHUD;
+	if (BlasterHUD && BlasterHUD->CharacterOverlay && BlasterHUD->CharacterOverlay->HealthBar && BlasterHUD->CharacterOverlay->DefeatsAmount)
+	{
+		FString DefeatsText = FString::Printf(TEXT("%d"), Defeats);
+		BlasterHUD->CharacterOverlay->DefeatsAmount->SetText(FText::FromString(DefeatsText));
+	}
+}
+
+void ABlasterPlayerController::ShowEliminatedMessage(bool bShow)
+{
+	BlasterHUD = BlasterHUD== nullptr ? Cast<ABlasterHUD>(GetHUD()) : BlasterHUD;
+	bool bHUDValid = BlasterHUD && BlasterHUD->CharacterOverlay && BlasterHUD->CharacterOverlay->EliminatedText;
+	if (bHUDValid)
+	{
+		BlasterHUD->CharacterOverlay->EliminatedText->SetVisibility(bShow ? ESlateVisibility::Visible : ESlateVisibility::Hidden);
+		if (bShow)
+		{
+			GetWorldTimerManager().SetTimer(ElimMessageTimer,this, &ABlasterPlayerController::HideEliminatedMessage,2.f);
+		}
+	}
+}
+
+void ABlasterPlayerController::HideEliminatedMessage()
+{
+	ShowEliminatedMessage(false);
+}
+
 void ABlasterPlayerController::BeginPlay()
 {
 	Super::BeginPlay();

@@ -10,6 +10,7 @@
 #include "BlasterCharacter.generated.h"
 
 
+class ABlasterPlayerState;
 class UTimelineComponent;
 class ABlasterPlayerController;
 enum ETurningInPlace : uint8;
@@ -68,8 +69,11 @@ protected:
 	void SimProxiesTurn();
 	virtual void Jump() override;
 	void PlayHitReactMontage();
-
 	void UpdateHudHealth();
+	
+	// Poll for any relevant classes and initialize our HUD
+	void PollInit();
+	
 	
 	UFUNCTION()
 	void ReceiveDamage(AActor* DamagedActor, float Damage, const UDamageType* DamageType, class AController* InstigatorController, AActor* DamageCauser);
@@ -177,4 +181,7 @@ private:
 	
 	UPROPERTY(EditAnywhere)
 	USoundCue* ElimBotSound;
+
+	UPROPERTY()
+	ABlasterPlayerState* BlasterPlayerState;
 };

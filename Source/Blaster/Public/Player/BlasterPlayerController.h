@@ -27,12 +27,18 @@ public:
 	virtual void OnPossess(APawn* InPawn) override;
 
 	void SetHUDHealth(float Health, float MaxHealth);
+	void SetHUDScore(float Score);
+	void SetHUDDefeats(int32 Defeats);
+	void ShowEliminatedMessage(bool bShow);
+	void HideEliminatedMessage();
+	
 protected:
 	virtual void BeginPlay() override;
 	virtual void SetupInputComponent() override;
 
 private:
-
+	FTimerHandle ElimMessageTimer;
+	
 	UPROPERTY()
 	ABlasterHUD* BlasterHUD;
 	
