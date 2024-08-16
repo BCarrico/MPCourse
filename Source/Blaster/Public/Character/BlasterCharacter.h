@@ -10,6 +10,7 @@
 #include "BlasterCharacter.generated.h"
 
 
+enum class ECombatState : uint8;
 class ABlasterPlayerState;
 class UTimelineComponent;
 class ABlasterPlayerController;
@@ -34,6 +35,7 @@ public:
 	virtual void PostInitializeComponents() override;
 	virtual void OnRep_ReplicatedMovement() override;
 	virtual void Destroyed() override;
+	
 	UCombatComponent* GetCombatComponent() const;
 	
 	void SetOverlappingWeapon(AWeapon* Weapon);
@@ -48,6 +50,7 @@ public:
 	FORCEINLINE bool IsEliminated() const {return bEliminated;}
 	FORCEINLINE float GetHealth() const {return Health;}
 	FORCEINLINE float GetMaxHealth() const {return MaxHealth;}
+	ECombatState GetCombatState() const;
 	AWeapon* GetEquippedWeapon();
 	void PlayFireMontage(bool bAiming);
 	void PlayElimMontage();
@@ -75,6 +78,8 @@ protected:
 	// Poll for any relevant classes and initialize our HUD
 	void PollInit();
 	
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	UCombatComponent* Combat;
 	
 	UFUNCTION()
 	void ReceiveDamage(AActor* DamagedActor, float Damage, const UDamageType* DamageType, class AController* InstigatorController, AActor* DamageCauser);
@@ -91,8 +96,7 @@ private:
 	UPROPERTY(ReplicatedUsing = OnRep_OverlappingWeapon) // Creates a replicated variable, calls OnRep_OverlappingWeapon when changed.
 	AWeapon* OverlappingWeapon;
 
-	UPROPERTY(VisibleAnywhere)
-	UCombatComponent* Combat;
+	
 
 	// Animation Montages
 	UPROPERTY(EditAnywhere, Category="Combat")

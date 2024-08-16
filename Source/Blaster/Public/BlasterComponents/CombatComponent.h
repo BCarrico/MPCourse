@@ -5,9 +5,11 @@
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
 #include "Blaster/Public/HUD/BlasterHUD.h"
+#include "BlasterTypes/CombatState.h"
 #include "CombatComponent.generated.h"
 
 #define TRACE_LENGTH 80000;
+enum class ECombatState : uint8;
 enum class EWeaponType : uint8;
 class ABlasterHUD;
 class ABlasterPlayerController;
@@ -29,6 +31,9 @@ public:
 	void Fire();
 	void FireButtonPressed(bool bIsFiring);
 	void Reload();
+
+	UFUNCTION(BlueprintCallable)
+	void FinishReloading();
 protected:
 	virtual void BeginPlay() override;
 	
@@ -49,6 +54,8 @@ protected:
 
 	UFUNCTION(Server, Reliable)
 	void ServerReload();
+
+	void HandleReload(); // For both servers and clients
 private:
 
 	ABlasterCharacter* Character;
@@ -115,4 +122,10 @@ private:
 	int32 StartingARAmmo = 30;
 	
 	void InitializeCarriedAmmo();
+
+	UPROPERTY(ReplicatedUsing=OnRep_CombatState)
+	ECombatState CombatState = ECombatState::ECS_Unoccupied;
+
+	UFUNCTION()
+	void OnRep_CombatState();
 };

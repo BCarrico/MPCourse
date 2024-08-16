@@ -102,6 +102,13 @@ UCombatComponent* ABlasterCharacter::GetCombatComponent() const
 	return Combat;
 }
 
+ECombatState ABlasterCharacter::GetCombatState() const
+{
+	if (Combat == nullptr) return ECombatState::ECS_MAX;
+	return Combat->CombatState;
+	
+}
+
 AWeapon* ABlasterCharacter::GetEquippedWeapon()
 {
 	if (Combat == nullptr) return nullptr;
@@ -137,7 +144,7 @@ void ABlasterCharacter::PlayReloadMontage()
 	UAnimInstance* AnimInstance = GetMesh()->GetAnimInstance();
 	if (AnimInstance && ReloadMontage)
 	{
-		AnimInstance->Montage_Play(FireWeaponMontage);
+		AnimInstance->Montage_Play(ReloadMontage);
 		FName SectionName;
 		switch (Combat->EquippedWeapon->GetWeaponType())
 		{
