@@ -142,6 +142,10 @@ void ABlasterCharacter::Elim() // Only on server
 
 void ABlasterCharacter::MulticastElim_Implementation()
 {
+	if (BlasterPlayerController)
+	{
+		BlasterPlayerController->SetHUDWeaponAmmo(0);
+	}
 	bEliminated = true;
 	PlayElimMontage();
 	BlasterPlayerController = BlasterPlayerController == nullptr ? Cast<ABlasterPlayerController>(Controller) : BlasterPlayerController;

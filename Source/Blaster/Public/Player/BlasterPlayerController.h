@@ -29,6 +29,7 @@ public:
 	void SetHUDHealth(float Health, float MaxHealth);
 	void SetHUDScore(float Score);
 	void SetHUDDefeats(int32 Defeats);
+	void SetHUDWeaponAmmo(int32 Ammo);
 	void ShowEliminatedMessage(bool bShow);
 	void HideEliminatedMessage();
 	
@@ -38,7 +39,7 @@ protected:
 
 private:
 	FTimerHandle ElimMessageTimer;
-	
+
 	UPROPERTY()
 	ABlasterHUD* BlasterHUD;
 	

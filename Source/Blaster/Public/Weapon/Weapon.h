@@ -6,6 +6,8 @@
 #include "GameFramework/Actor.h"
 #include "Weapon.generated.h"
 
+class ABlasterPlayerController;
+class ABlasterCharacter;
 class ACasing;
 class UWidgetComponent;
 
@@ -28,6 +30,7 @@ public:
 	AWeapon();
 	virtual void Tick(float DeltaTime) override;
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
+	virtual void OnRep_Owner() override;
 	void ShowPickupWidget(bool bShowWidget);
 	virtual void Fire(const FVector& HitTarget);
 	void SetWeaponState(EWeaponState State);
@@ -61,6 +64,7 @@ public:
 	UPROPERTY(EditAnywhere, Category="Combat")
 	float FireDelay = .15f;
 	
+	void SetHUDAmmo();
 protected:
 	virtual void BeginPlay() override;
 
@@ -69,6 +73,12 @@ protected:
 	UFUNCTION()
 	virtual void OnSphereEndOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
 private:
+	UPROPERTY()
+	ABlasterCharacter* BlasterOwnerCharacter;
+	
+	UPROPERTY()
+	ABlasterPlayerController* BlasterOwnerController;
+	
 	UPROPERTY(VisibleAnywhere, Category="Weapon Properties")
 	USkeletalMeshComponent* WeaponMesh;
 	
@@ -80,7 +90,8 @@ private:
 
 	UFUNCTION()
 	void OnRep_WeaponState();
-	
+
+
 	UPROPERTY(VisibleAnywhere, Category="Weapon Properties")
 	UWidgetComponent* PickupWidget;
 
@@ -90,9 +101,20 @@ private:
 	UPROPERTY(EditAnywhere)
 	TSubclassOf<ACasing> CasingClass;
 
+	UPROPERTY(EditAnywhere, ReplicatedUsing=OnRep_Ammo)
+	int32 Ammo;
+
+	UFUNCTION()
+	void OnRep_Ammo();
+
+	void SpendRound();
+
+	UPROPERTY(EditAnywhere)
+	int32 MagCapacity;
 	
 	// Zoomed FOV while aiming
 
+	
 	UPROPERTY(EditAnywhere)
 	float ZoomedFOV = 30.f;
 
