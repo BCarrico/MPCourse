@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "WeaponType.h"
+#include "Sound/SoundCue.h"
 #include "GameFramework/Actor.h"
 #include "Weapon.generated.h"
 
@@ -68,6 +69,9 @@ public:
 	
 	UPROPERTY(EditAnywhere, Category="Combat")
 	float FireDelay = .15f;
+
+	UPROPERTY(EditAnywhere)
+	USoundCue* EquipSound;
 	
 	void SetHUDAmmo();
 	bool IsEmpty();
