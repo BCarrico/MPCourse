@@ -43,7 +43,7 @@ protected:
 	virtual void SetupInputComponent() override;
 	void SetHUDTime();
 	void PollInit();
-	
+	void HandleMatchHasStarted();
 	// Sync Time between Client and Server
 
 	UFUNCTION(Server, Reliable) // Requests the current Server time, passing in the Client's time when the request was sent
