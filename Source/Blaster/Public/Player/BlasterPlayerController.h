@@ -7,6 +7,7 @@
 #include "GameFramework/PlayerController.h"
 #include "BlasterPlayerController.generated.h"
 
+class UCharacterOverlay;
 class ABlasterHUD;
 struct FInputActionValue;
 class UInputMappingContext;
@@ -25,7 +26,7 @@ class BLASTER_API ABlasterPlayerController : public APlayerController
 public:
 	ABlasterPlayerController();
 	virtual void OnPossess(APawn* InPawn) override;
-
+	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 	void SetHUDHealth(float Health, float MaxHealth);
 	void SetHUDScore(float Score);
 	void SetHUDDefeats(int32 Defeats);
@@ -34,14 +35,15 @@ public:
 	void ShowEliminatedMessage(bool bShow);
 	void HideEliminatedMessage();
 	void SetHUDMatchCountdown(float CountdownTime);
-	
+	void OnMatchStateSet(FName State);
 protected:
 	virtual void Tick(float DeltaSeconds) override;
 	virtual void BeginPlay() override;
 	void CheckTimeSync(float DeltaSeconds);
 	virtual void SetupInputComponent() override;
 	void SetHUDTime();
-
+	void PollInit();
+	
 	// Sync Time between Client and Server
 
 	UFUNCTION(Server, Reliable) // Requests the current Server time, passing in the Client's time when the request was sent
@@ -60,6 +62,7 @@ protected:
 	virtual float GetServerTime(); // Synced with server world clock
 	virtual void ReceivedPlayer() override; // Sync with server clock as soon as possible
 	
+
 private:
 	FTimerHandle ElimMessageTimer;
 
@@ -104,5 +107,20 @@ private:
 
 	float MatchTime = 120.f;
 	uint32 CountdownInt = 0;
+
+	UPROPERTY(ReplicatedUsing = OnRep_MatchState)
+	FName MatchState;
+
+	UFUNCTION()
+	void OnRep_MatchState();
+
+	UPROPERTY()
+	UCharacterOverlay* CharacterOverlay;
 	
+	bool bInitializeCharacterOverlay = false;
+	float HUDHealth;
+	float HUDMaxHealth;
+	float HUDScore;
+	int32 HUDDefeats;
+
 };
