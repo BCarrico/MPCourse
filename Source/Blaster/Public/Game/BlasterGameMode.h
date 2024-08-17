@@ -9,6 +9,11 @@
 
 class ABlasterPlayerController;
 class ABlasterCharacter;
+
+namespace MatchState
+{
+	extern BLASTER_API const FName Cooldown; // Match duration has been reached, display winner and begin cooldown timer
+}
 /**
  * 
  */
@@ -23,12 +28,17 @@ public:
 	virtual void PlayerEliminated(ABlasterCharacter* EliminatedCharacter, ABlasterPlayerController* VictimController, ABlasterPlayerController* AttackerController);
 	virtual void RequestRespawn(ACharacter* ElimintedCharacter, AController* EliminatedController);
 	FORCEINLINE float GetLevelStartingTime() const {return LevelStartingTime;}
+	
 	UPROPERTY(EditDefaultsOnly)
 	float WarmUpTime = 10.f;
+	
 	UPROPERTY(EditDefaultsOnly)
 	float MatchTime = 120.f;
+	
 	float LevelStartingTime = 0.f;
 
+	UPROPERTY(EditDefaultsOnly)
+	float CooldownTime = 10.f;
 protected:
 	virtual void BeginPlay() override;
 	virtual void OnMatchStateSet() override;

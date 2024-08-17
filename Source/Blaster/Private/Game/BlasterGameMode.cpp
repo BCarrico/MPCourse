@@ -7,6 +7,11 @@
 #include "Kismet/GameplayStatics.h"
 #include "PlayerState/BlasterPlayerState.h"
 
+namespace MatchState
+{
+	const FName Cooldown = FName("Cooldown");
+}
+
 ABlasterGameMode::ABlasterGameMode()
 {
 	bDelayedStart = true; // Stay in waiting to start state, default pawn spawned and can fly around
@@ -22,6 +27,14 @@ void ABlasterGameMode::Tick(float DeltaSeconds)
 		if (CountdownTime <= 0.f)
 		{
 			StartMatch();
+		}
+	}
+	else if (MatchState == MatchState::InProgress)
+	{
+		CountdownTime = WarmUpTime + MatchTime - GetWorld()->GetTimeSeconds() + LevelStartingTime;
+		if (CountdownTime <= 0.f)
+		{
+			SetMatchState(MatchState::Cooldown);
 		}
 	}
 }
