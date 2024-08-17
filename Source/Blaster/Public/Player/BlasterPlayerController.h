@@ -33,11 +33,13 @@ public:
 	void SetHUDCarriedAmmo(int32 Ammo);
 	void ShowEliminatedMessage(bool bShow);
 	void HideEliminatedMessage();
+	void SetHUDMatchCountdown(float CountdownTime);
 	
 protected:
+	virtual void Tick(float DeltaSeconds) override;
 	virtual void BeginPlay() override;
 	virtual void SetupInputComponent() override;
-
+	void SetHUDTime();
 private:
 	FTimerHandle ElimMessageTimer;
 
@@ -79,4 +81,7 @@ private:
 	void Aiming(const FInputActionValue& InputActionValue);
 	void FireButtonPressed(const FInputActionValue& InputActionValue);
 	void ReloadButtonPressed();
+
+	float MatchTime = 120.f;
+	uint32 CountdownInt = 0;
 };
