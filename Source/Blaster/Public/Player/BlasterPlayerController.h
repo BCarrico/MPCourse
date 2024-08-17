@@ -35,6 +35,7 @@ public:
 	void ShowEliminatedMessage(bool bShow);
 	void HideEliminatedMessage();
 	void SetHUDMatchCountdown(float CountdownTime);
+	void SetHUDAnnouncementCountdown(float CountdownTime);
 	void OnMatchStateSet(FName State);
 protected:
 	virtual void Tick(float DeltaSeconds) override;
@@ -61,8 +62,12 @@ protected:
 	
 	virtual float GetServerTime(); // Synced with server world clock
 	virtual void ReceivedPlayer() override; // Sync with server clock as soon as possible
-	
 
+	UFUNCTION(Server, Reliable)
+	void ServerCheckMatchState();
+
+	UFUNCTION(Client, Reliable)
+	void ClientJoinMidGame(FName StateOfMatch, float Warmup, float Match, float StartingTime);
 private:
 	FTimerHandle ElimMessageTimer;
 
@@ -105,7 +110,9 @@ private:
 	void FireButtonPressed(const FInputActionValue& InputActionValue);
 	void ReloadButtonPressed();
 
-	float MatchTime = 120.f;
+	float LevelStartingTime = 0.f;
+	float MatchTime = 0.f;
+	float WarmupTime = 0.f;
 	uint32 CountdownInt = 0;
 
 	UPROPERTY(ReplicatedUsing = OnRep_MatchState)

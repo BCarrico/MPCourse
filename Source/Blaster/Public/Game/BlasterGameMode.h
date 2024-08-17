@@ -22,10 +22,11 @@ public:
 	virtual void Tick(float DeltaSeconds) override;
 	virtual void PlayerEliminated(ABlasterCharacter* EliminatedCharacter, ABlasterPlayerController* VictimController, ABlasterPlayerController* AttackerController);
 	virtual void RequestRespawn(ACharacter* ElimintedCharacter, AController* EliminatedController);
-
+	FORCEINLINE float GetLevelStartingTime() const {return LevelStartingTime;}
 	UPROPERTY(EditDefaultsOnly)
 	float WarmUpTime = 10.f;
-
+	UPROPERTY(EditDefaultsOnly)
+	float MatchTime = 120.f;
 	float LevelStartingTime = 0.f;
 
 protected:
