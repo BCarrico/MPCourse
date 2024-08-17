@@ -34,6 +34,8 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	void FinishReloading();
+	void UpdateAmmoValues();
+
 protected:
 	virtual void BeginPlay() override;
 	
@@ -56,6 +58,8 @@ protected:
 	void ServerReload();
 
 	void HandleReload(); // For both servers and clients
+
+	int32 AmountToReload();
 private:
 
 	ABlasterCharacter* Character;
