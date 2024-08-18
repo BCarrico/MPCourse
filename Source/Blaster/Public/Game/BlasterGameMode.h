@@ -28,7 +28,7 @@ public:
 	virtual void PlayerEliminated(ABlasterCharacter* EliminatedCharacter, ABlasterPlayerController* VictimController, ABlasterPlayerController* AttackerController);
 	virtual void RequestRespawn(ACharacter* ElimintedCharacter, AController* EliminatedController);
 	FORCEINLINE float GetLevelStartingTime() const {return LevelStartingTime;}
-	
+	FORCEINLINE float GetCountdownTime() const {return CountdownTime;}
 	UPROPERTY(EditDefaultsOnly)
 	float WarmUpTime = 10.f;
 	

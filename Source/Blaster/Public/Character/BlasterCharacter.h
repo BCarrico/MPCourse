@@ -36,8 +36,6 @@ public:
 	virtual void OnRep_ReplicatedMovement() override;
 	virtual void Destroyed() override;
 	
-	UCombatComponent* GetCombatComponent() const;
-	
 	void SetOverlappingWeapon(AWeapon* Weapon);
 	void EquipWeapon();
 	bool IsWeaponEquipped() const;
@@ -50,6 +48,8 @@ public:
 	FORCEINLINE bool IsEliminated() const {return bEliminated;}
 	FORCEINLINE float GetHealth() const {return Health;}
 	FORCEINLINE float GetMaxHealth() const {return MaxHealth;}
+	FORCEINLINE UCombatComponent* GetCombatComponent() const {return Combat;};
+	FORCEINLINE bool GetDisableGameplay() const {return bDisableGameplay;}
 	ECombatState GetCombatState() const;
 	AWeapon* GetEquippedWeapon();
 	void PlayFireMontage(bool bAiming);
@@ -62,8 +62,9 @@ public:
 	void Elim();
 	
 	FVector GetHitTarget() const;
-	
 
+	UPROPERTY(Replicated)
+	bool bDisableGameplay = false;
 protected:
 	
 	virtual void BeginPlay() override;
@@ -116,6 +117,7 @@ private:
 	
 	UFUNCTION()
 	void OnRep_OverlappingWeapon(AWeapon* LastWeapon); // Rep notifies can only have input parameter of the type of variable being replicated
+	void RotateInPlace(float DeltaTime);
 
 	void TurnInPlace(float DeltaTime);
 

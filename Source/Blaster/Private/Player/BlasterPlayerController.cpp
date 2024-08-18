@@ -82,7 +82,7 @@ void ABlasterPlayerController::SetHUDTime()
 {
 	if (HasAuthority())
 	{
-		ABlasterGameMode* BlasterGameMode = Cast<ABlasterGameMode>(UGameplayStatics::GetGameMode(this));
+		BlasterGameMode = BlasterGameMode == nullptr ? Cast<ABlasterGameMode>(UGameplayStatics::GetGameMode(this)) : BlasterGameMode;
 		if (BlasterGameMode)
 		{
 			LevelStartingTime = BlasterGameMode->GetLevelStartingTime();
@@ -91,11 +91,20 @@ void ABlasterPlayerController::SetHUDTime()
 	float TimeLeft = 0.f;
 	if (MatchState == MatchState::WaitingToStart) TimeLeft = WarmupTime - GetServerTime() + LevelStartingTime;
 	else if (MatchState == MatchState::InProgress) TimeLeft = WarmupTime + MatchTime - GetServerTime() + LevelStartingTime;
-	
+	else if (MatchState == MatchState::Cooldown) TimeLeft = CooldownTime + WarmupTime + MatchTime - GetServerTime() + LevelStartingTime;
 	uint32 SecondsLeft = FMath::CeilToInt(TimeLeft - GetServerTime());
+
+	if (HasAuthority())
+	{
+		BlasterGameMode = BlasterGameMode == nullptr ? Cast<ABlasterGameMode>(UGameplayStatics::GetGameMode(this)) : BlasterGameMode;
+		if (BlasterGameMode)
+		{
+			SecondsLeft = FMath::CeilToInt(BlasterGameMode->GetCountdownTime() + LevelStartingTime);
+		}
+	}
 	if (CountdownInt != SecondsLeft)
 	{
-		if (MatchState == MatchState::WaitingToStart)
+		if (MatchState == MatchState::WaitingToStart || MatchState == MatchState::Cooldown)
 		{
 			SetHUDAnnouncementCountdown(TimeLeft);
 		}
@@ -153,16 +162,18 @@ void ABlasterPlayerController::ServerCheckMatchState_Implementation()
 		WarmupTime = GameMode->WarmUpTime;
 		MatchTime = GameMode->MatchTime;
 		LevelStartingTime = GameMode->LevelStartingTime;
+		CooldownTime = GameMode->CooldownTime;
 		MatchState = GameMode->GetMatchState();
-		ClientJoinMidGame(MatchState, WarmupTime, MatchTime, LevelStartingTime);
+		ClientJoinMidGame(MatchState, WarmupTime, MatchTime, LevelStartingTime, CooldownTime);
 	}
 }
 
-void ABlasterPlayerController::ClientJoinMidGame_Implementation(FName StateOfMatch, float Warmup, float Match, float StartingTime)
+void ABlasterPlayerController::ClientJoinMidGame_Implementation(FName StateOfMatch, float Warmup, float Match, float StartingTime, float Cooldown)
 {
 	WarmupTime = Warmup;
 	MatchTime = Match;
 	LevelStartingTime = StartingTime;
+	CooldownTime = Cooldown;
 	MatchState = StateOfMatch;
 	OnMatchStateSet(MatchState);
 	if (BlasterHUD && MatchState == MatchState::WaitingToStart)
@@ -243,6 +254,11 @@ void ABlasterPlayerController::SetHUDMatchCountdown(float CountdownTime)
 	BlasterHUD = BlasterHUD == nullptr ? Cast<ABlasterHUD>(GetHUD()) : BlasterHUD;
 	if (BlasterHUD && BlasterHUD->CharacterOverlay && BlasterHUD->CharacterOverlay->MatchCountdownText)
 	{
+		if (CountdownTime < 0.f)
+		{
+			BlasterHUD->CharacterOverlay->MatchCountdownText->SetText(FText());
+			return;
+		}
 		int32 Minutes = FMath::FloorToInt(CountdownTime / 60.f);
 		int32 Seconds = CountdownTime - Minutes * 60;
 		FString CountdownText = FString::Printf(TEXT("%02d:%02d"), Minutes, Seconds);
@@ -255,6 +271,11 @@ void ABlasterPlayerController::SetHUDAnnouncementCountdown(float CountdownTime)
 	BlasterHUD = BlasterHUD == nullptr ? Cast<ABlasterHUD>(GetHUD()) : BlasterHUD;
 	if (BlasterHUD && BlasterHUD->AnnouncementOverlay && BlasterHUD->AnnouncementOverlay->WarmupTime)
 	{
+		if (CountdownTime < 0.f)
+		{
+			BlasterHUD->AnnouncementOverlay->WarmupTime->SetText(FText());
+			return;
+		}
 		int32 Minutes = FMath::FloorToInt(CountdownTime / 60.f);
 		int32 Seconds = CountdownTime - Minutes * 60;
 		FString CountdownText = FString::Printf(TEXT("%02d:%02d"), Minutes, Seconds);
@@ -307,10 +328,19 @@ void ABlasterPlayerController::HandleCooldown()
 	if (BlasterHUD)
 	{
 		BlasterHUD->CharacterOverlay->RemoveFromParent();
-		if (BlasterHUD->AnnouncementOverlay)
+		if (BlasterHUD->AnnouncementOverlay && BlasterHUD->AnnouncementOverlay->AnnoucementText && BlasterHUD->AnnouncementOverlay->InfoText)
 		{
 			BlasterHUD->AnnouncementOverlay->SetVisibility(ESlateVisibility::Visible);
+			FString AnnouncementText("New Match Starts In:");
+			BlasterHUD->AnnouncementOverlay->AnnoucementText->SetText(FText::FromString(AnnouncementText));
+			BlasterHUD->AnnouncementOverlay->InfoText->SetText(FText());
 		}
+	}
+	ABlasterCharacter* BlasterCharacter = Cast<ABlasterCharacter>(GetPawn());
+	if (BlasterCharacter && BlasterCharacter->GetCombatComponent())
+	{
+		BlasterCharacter->bDisableGameplay = true;
+		BlasterCharacter->GetCombatComponent()->FireButtonPressed(false);
 	}
 }
 
@@ -372,6 +402,12 @@ void ABlasterPlayerController::SetupInputComponent()
 
 void ABlasterPlayerController::Move(const FInputActionValue& InputActionValue)
 {
+	APawn* ControlledPawn = GetPawn<APawn>();
+	ABlasterCharacter* BlasterCharacter = Cast<ABlasterCharacter>(ControlledPawn);
+	if (BlasterCharacter && BlasterCharacter->bDisableGameplay)
+	{
+		return;
+	}
 	const FVector2d InputAxisVector = InputActionValue.Get<FVector2d>();
 	const FRotator Rotation = GetControlRotation();
 	const FRotator YawRotation(0.f, Rotation.Yaw, 0.f);
@@ -379,12 +415,11 @@ void ABlasterPlayerController::Move(const FInputActionValue& InputActionValue)
 	const FVector ForwardDirection = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::X);
 	const FVector RightDirection = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::Y);
 
-	if (APawn* ControlledPawn = GetPawn<APawn>())
+	if (ControlledPawn)
 	{
 		ControlledPawn->AddMovementInput(ForwardDirection, InputAxisVector.Y);
 		ControlledPawn->AddMovementInput(RightDirection, InputAxisVector.X);
 	}
-	
 }
 
 void ABlasterPlayerController::Look(const FInputActionValue& InputActionValue)
@@ -402,9 +437,11 @@ void ABlasterPlayerController::JumpButtonPressed()
 {
 	if (APawn* ControlledPawn = GetPawn<APawn>())
 	{
-		if (ACharacter* BlasterCharacter = Cast<ACharacter>(ControlledPawn))
+		ABlasterCharacter* BlasterCharacter = Cast<ABlasterCharacter>(ControlledPawn);
+		if (BlasterCharacter && BlasterCharacter->bDisableGameplay) return;
+		if (ACharacter* ControlledCharacter = Cast<ACharacter>(ControlledPawn))
 		{
-			BlasterCharacter->Jump();
+			ControlledCharacter->Jump();
 		}
 	}
 }
@@ -415,6 +452,7 @@ void ABlasterPlayerController::EquipButtonPressed()
 	{
 		if (ABlasterCharacter* BlasterCharacter = Cast<ABlasterCharacter>(ControlledPawn))
 		{
+			if (BlasterCharacter->bDisableGameplay) return;
 			BlasterCharacter->EquipWeapon();
 		}
 	}
@@ -424,15 +462,19 @@ void ABlasterPlayerController::CrouchButtonPressed()
 {
 	if (APawn* ControlledPawn = GetPawn<APawn>())
 	{
-		if (ACharacter* BlasterCharacter = Cast<ACharacter>(ControlledPawn))
+		if (ABlasterCharacter* BlasterCharacter = Cast<ABlasterCharacter>(ControlledPawn))
 		{
-			if (BlasterCharacter->bIsCrouched)
+			if (BlasterCharacter->bDisableGameplay) return;
+		}
+		if (ACharacter* ControlledCharacter = Cast<ACharacter>(ControlledPawn))
+		{
+			if (ControlledCharacter->bIsCrouched)
 			{
-				BlasterCharacter->UnCrouch();
+				ControlledCharacter->UnCrouch();
 			}
 			else
 			{
-				BlasterCharacter->Crouch();
+				ControlledCharacter->Crouch();
 			}
 		}
 	}
@@ -446,6 +488,7 @@ void ABlasterPlayerController::Aiming(const FInputActionValue& InputActionValue)
 	{
 		if (ABlasterCharacter* BlasterCharacter = Cast<ABlasterCharacter>(ControlledPawn))
 		{
+			if (BlasterCharacter->bDisableGameplay) return;
 			if (UCombatComponent* CombatComponent = BlasterCharacter->GetCombatComponent())
 			{
 				CombatComponent->SetAiming(IsAiming);
@@ -461,6 +504,7 @@ void ABlasterPlayerController::FireButtonPressed(const FInputActionValue& InputA
 	{
 		if (ABlasterCharacter* BlasterCharacter = Cast<ABlasterCharacter>(ControlledPawn))
 		{
+			if (BlasterCharacter->bDisableGameplay) return;
 			if (UCombatComponent* CombatComponent = BlasterCharacter->GetCombatComponent())
 			{
 				CombatComponent->FireButtonPressed(IsFiring);
@@ -475,6 +519,7 @@ void ABlasterPlayerController::ReloadButtonPressed()
 	{
 		if (ABlasterCharacter* BlasterCharacter = Cast<ABlasterCharacter>(ControlledPawn))
 		{
+			if (BlasterCharacter->bDisableGameplay) return;
 			if (UCombatComponent* CombatComponent = BlasterCharacter->GetCombatComponent())
 			{
 				CombatComponent->Reload();
