@@ -40,9 +40,11 @@ protected:
 	UParticleSystem* ImpactParticlesEnemy;
 	
 	bool bIsEnemy;
-private:
+	
 	UPROPERTY(VisibleAnywhere)
 	UProjectileMovementComponent* ProjectileMovementComponent;
+private:
+
 
 	UPROPERTY(EditAnywhere)
 	UParticleSystem* Tracer;
