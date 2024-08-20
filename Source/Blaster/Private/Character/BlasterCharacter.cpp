@@ -159,6 +159,9 @@ void ABlasterCharacter::PlayReloadMontage()
 		case EWeaponType::EWT_Pistol:
 			SectionName = FName("Rifle"); // TODO: Pistol Animation
 			break;
+		case EWeaponType::EWT_SubmachineGun:
+			SectionName = FName("Rifle"); // TODO: SMG Animation
+			break;
 		}
 		AnimInstance->Montage_JumpToSection(SectionName);
 	}
