@@ -165,6 +165,9 @@ void ABlasterCharacter::PlayReloadMontage()
 		case EWeaponType::EWT_Shotgun:
 			SectionName = FName("Rifle"); // TODO: Shotgun Animation
 			break;
+		case EWeaponType::EWT_SniperRifle:
+			SectionName = FName("Rifle"); // TODO: Sniper Animation
+			break;
 		}
 		AnimInstance->Montage_JumpToSection(SectionName);
 	}
