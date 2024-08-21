@@ -154,22 +154,22 @@ void ABlasterCharacter::PlayReloadMontage()
 			SectionName = FName("Rifle");
 			break;
 		case EWeaponType::EWT_RocketLauncher:
-			SectionName = FName("Rifle"); // TODO: RocketReload Animation
+			SectionName = FName("RocketLauncher"); 
 			break;
 		case EWeaponType::EWT_Pistol:
-			SectionName = FName("Rifle"); // TODO: Pistol Animation
+			SectionName = FName("Pistol"); g
 			break;
 		case EWeaponType::EWT_SubmachineGun:
-			SectionName = FName("Rifle"); // TODO: SMG Animation
+			SectionName = FName("Pistol"); 
 			break;
 		case EWeaponType::EWT_Shotgun:
-			SectionName = FName("Rifle"); // TODO: Shotgun Animation
+			SectionName = FName("Shotgun"); 
 			break;
 		case EWeaponType::EWT_SniperRifle:
-			SectionName = FName("Rifle"); // TODO: Sniper Animation
+			SectionName = FName("SniperRifle"); 
 			break;
 		case EWeaponType::EWT_GrenadeLauncher:
-			SectionName = FName("Rifle"); // TODO: GrenadeLauncher Animation
+			SectionName = FName("GrenadeLauncher"); 
 			break;
 		}
 		AnimInstance->Montage_JumpToSection(SectionName);
