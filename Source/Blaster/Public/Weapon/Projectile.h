@@ -6,6 +6,8 @@
 #include "GameFramework/Actor.h"
 #include "Projectile.generated.h"
 
+class UNiagaraSystem;
+class UNiagaraComponent;
 class UProjectileMovementComponent;
 class UBoxComponent;
 
@@ -20,6 +22,10 @@ public:
 	virtual void Destroyed() override;
 protected:
 	virtual void BeginPlay() override;
+	void SpawnTrailSystem();
+	void StartDestroyTimer();
+	void DestroyTimerFinished();
+	void ExplodeDamage();
 
 	UFUNCTION()
 	virtual void OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalInpulse, const FHitResult& Hit);
@@ -43,8 +49,27 @@ protected:
 	
 	UPROPERTY(VisibleAnywhere)
 	UProjectileMovementComponent* ProjectileMovementComponent;
+
+	UPROPERTY(EditAnywhere)
+	UNiagaraSystem* TrailSystem;
+
+	UPROPERTY()
+	UNiagaraComponent* TrailSystemComponent;
+	
+	UPROPERTY(VisibleAnywhere)
+	UStaticMeshComponent* ProjectileMesh;
+	
+	UPROPERTY(EditAnywhere)
+	float DamageInnerRadius = 200.f;
+	
+	UPROPERTY(EditAnywhere)
+	float DamageOuterRadius = 500.f;
 private:
 
+	FTimerHandle DestroyTimer;
+
+	UPROPERTY(EditAnywhere)
+	float DestroyTime = 3.f;
 
 	UPROPERTY(EditAnywhere)
 	UParticleSystem* Tracer;
