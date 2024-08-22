@@ -75,6 +75,7 @@ public:
 	
 	void SetHUDAmmo();
 	bool IsEmpty();
+	bool IsFull();
 protected:
 	virtual void BeginPlay() override;
 

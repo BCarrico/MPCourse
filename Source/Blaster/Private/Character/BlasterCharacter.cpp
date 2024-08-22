@@ -157,7 +157,7 @@ void ABlasterCharacter::PlayReloadMontage()
 			SectionName = FName("RocketLauncher"); 
 			break;
 		case EWeaponType::EWT_Pistol:
-			SectionName = FName("Pistol"); g
+			SectionName = FName("Pistol"); 
 			break;
 		case EWeaponType::EWT_SubmachineGun:
 			SectionName = FName("Pistol"); 

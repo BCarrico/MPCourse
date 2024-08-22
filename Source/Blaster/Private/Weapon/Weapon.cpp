@@ -2,6 +2,8 @@
 
 
 #include "Weapon/Weapon.h"
+
+#include "BlasterComponents/CombatComponent.h"
 #include "Net/UnrealNetwork.h"
 #include "Character/BlasterCharacter.h"
 #include "Components/SphereComponent.h"
@@ -199,8 +201,17 @@ bool AWeapon::IsEmpty()
 	return Ammo <= 0;
 }
 
+bool AWeapon::IsFull()
+{
+	return Ammo == MagCapacity;
+}
+
 void AWeapon::OnRep_Ammo()
 {
+	if (BlasterOwnerCharacter && BlasterOwnerCharacter->GetCombatComponent() && IsFull())
+	{
+		BlasterOwnerCharacter->GetCombatComponent()->JumpToShotgunEnd();
+	}
 	SetHUDAmmo();
 }
 

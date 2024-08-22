@@ -50,6 +50,7 @@ public:
 	FORCEINLINE float GetMaxHealth() const {return MaxHealth;}
 	FORCEINLINE UCombatComponent* GetCombatComponent() const {return Combat;};
 	FORCEINLINE bool GetDisableGameplay() const {return bDisableGameplay;}
+	FORCEINLINE UAnimMontage* GetReloadMontage() const {return ReloadMontage;}
 	ECombatState GetCombatState() const;
 	AWeapon* GetEquippedWeapon();
 	void PlayFireMontage(bool bAiming);

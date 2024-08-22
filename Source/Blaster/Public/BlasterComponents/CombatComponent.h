@@ -35,6 +35,10 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void FinishReloading();
 	void UpdateAmmoValues();
+	void UpdateShotgunAmmoValues();
+	void JumpToShotgunEnd();
+	UFUNCTION(BlueprintCallable)
+	void ShotgunShellReload();
 
 protected:
 	virtual void BeginPlay() override;
