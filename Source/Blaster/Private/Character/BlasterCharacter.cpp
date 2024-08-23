@@ -176,6 +176,15 @@ void ABlasterCharacter::PlayReloadMontage()
 	}
 }
 
+void ABlasterCharacter::PlayThrowGrenadeMontage()
+{
+	UAnimInstance* AnimInstance = GetMesh()->GetAnimInstance();
+	if (AnimInstance && ThrowGrenadeMontage)
+	{
+		AnimInstance->Montage_Play(ThrowGrenadeMontage);
+	}
+}
+
 void ABlasterCharacter::Elim() // Only on server
 {
 	if (Combat && Combat->EquippedWeapon)

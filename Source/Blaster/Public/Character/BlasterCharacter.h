@@ -56,6 +56,7 @@ public:
 	void PlayFireMontage(bool bAiming);
 	void PlayElimMontage();
 	void PlayReloadMontage();
+	void PlayThrowGrenadeMontage();
 
 	UFUNCTION(BlueprintImplementableEvent)
 	void ShowSniperScopeWidget(bool bShowScope);
@@ -115,6 +116,9 @@ private:
 	
 	UPROPERTY(EditAnywhere, Category="Combat")
 	UAnimMontage* ReloadMontage;
+
+	UPROPERTY(EditAnywhere, Category="Combat")
+	UAnimMontage* ThrowGrenadeMontage;
 
 	UFUNCTION(Server, Reliable)
 	void ServerEquipButtonPressed();

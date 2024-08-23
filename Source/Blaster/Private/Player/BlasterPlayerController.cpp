@@ -434,6 +434,7 @@ void ABlasterPlayerController::SetupInputComponent()
 	EnhancedInputComponent->BindAction(AimAction, ETriggerEvent::Triggered, this, &ABlasterPlayerController::Aiming); // See IA_Aiming for Pressed & Released
 	EnhancedInputComponent->BindAction(FireAction, ETriggerEvent::Triggered, this, &ABlasterPlayerController::FireButtonPressed);
 	EnhancedInputComponent->BindAction(ReloadAction, ETriggerEvent::Triggered, this, &ABlasterPlayerController::ReloadButtonPressed);
+	EnhancedInputComponent->BindAction(ThrowGrenadeAction, ETriggerEvent::Triggered, this, &ABlasterPlayerController::ThrowGrenadeButtonPressed);
 }
 
 void ABlasterPlayerController::Move(const FInputActionValue& InputActionValue)
@@ -559,6 +560,21 @@ void ABlasterPlayerController::ReloadButtonPressed()
 			if (UCombatComponent* CombatComponent = BlasterCharacter->GetCombatComponent())
 			{
 				CombatComponent->Reload();
+			}
+		}
+	}
+}
+
+void ABlasterPlayerController::ThrowGrenadeButtonPressed()
+{
+	if (APawn* ControlledPawn = GetPawn<APawn>())
+	{
+		if (ABlasterCharacter* BlasterCharacter = Cast<ABlasterCharacter>(ControlledPawn))
+		{
+			if (BlasterCharacter->bDisableGameplay) return;
+			if (UCombatComponent* CombatComponent = BlasterCharacter->GetCombatComponent())
+			{
+				CombatComponent->ThrowGrenade();
 			}
 		}
 	}

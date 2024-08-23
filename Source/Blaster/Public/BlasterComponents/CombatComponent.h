@@ -31,7 +31,11 @@ public:
 	void Fire();
 	void FireButtonPressed(bool bIsFiring);
 	void Reload();
-
+	void ThrowGrenade();
+	
+	UFUNCTION(Server, Reliable)
+	void ServerThrowGrenade();
+	
 	UFUNCTION(BlueprintCallable)
 	void FinishReloading();
 	void UpdateAmmoValues();
@@ -40,6 +44,8 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void ShotgunShellReload();
 
+	UFUNCTION(BlueprintCallable)
+	void ThrowGrenadeFinished();
 protected:
 	virtual void BeginPlay() override;
 	

@@ -105,6 +105,9 @@ private:
 	UPROPERTY(EditAnywhere, Category="Input")
 	TObjectPtr<UInputAction> ReloadAction;
 
+	UPROPERTY(EditAnywhere, Category="Input")
+	TObjectPtr<UInputAction> ThrowGrenadeAction;
+
 	void Move(const FInputActionValue& InputActionValue);
 	void Look(const FInputActionValue& InputActionValue);
 	void JumpButtonPressed();
@@ -113,6 +116,7 @@ private:
 	void Aiming(const FInputActionValue& InputActionValue);
 	void FireButtonPressed(const FInputActionValue& InputActionValue);
 	void ReloadButtonPressed();
+	void ThrowGrenadeButtonPressed();
 
 	float LevelStartingTime = 0.f;
 	float MatchTime = 0.f;
