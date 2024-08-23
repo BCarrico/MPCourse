@@ -39,7 +39,8 @@ public:
 	void FireButtonPressed(bool bIsFiring);
 	void Reload();
 	void ThrowGrenade();
-	
+
+	FORCEINLINE int32 GetGrenades() const {return Grenades;}
 	UFUNCTION(Server, Reliable)
 	void ServerThrowGrenade();
 
@@ -169,7 +170,17 @@ private:
 	
 	UPROPERTY(EditAnywhere)
 	int32 StartinGrenadeLauncherAmmo = 0;
-	
+
+	UPROPERTY(ReplicatedUsing = OnRep_Grenades)
+	int32 Grenades = 4;
+
+	UPROPERTY(EditAnywhere)
+	int32 MaxGrenades = 4;
+
+	UFUNCTION()
+	void OnRep_Grenades();
+
+	void UpdateHUDGrenades();
 	void InitializeCarriedAmmo();
 
 	UPROPERTY(ReplicatedUsing=OnRep_CombatState)
