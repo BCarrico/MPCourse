@@ -9,6 +9,7 @@
 #include "CombatComponent.generated.h"
 
 
+class AProjectile;
 enum class ECombatState : uint8;
 enum class EWeaponType : uint8;
 class ABlasterHUD;
@@ -41,6 +42,9 @@ public:
 	
 	UFUNCTION(Server, Reliable)
 	void ServerThrowGrenade();
+
+	UPROPERTY(EditAnywhere)
+	TSubclassOf<AProjectile> GrenadeClass;
 	
 	UFUNCTION(BlueprintCallable)
 	void FinishReloading();
@@ -52,6 +56,9 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	void ThrowGrenadeFinished();
+
+	UFUNCTION(BlueprintCallable)
+	void LaunchGrenade();
 protected:
 	virtual void BeginPlay() override;
 	
@@ -74,8 +81,9 @@ protected:
 	void ServerReload();
 
 	void HandleReload(); // For both servers and clients
-
+	void ShowAttachedGrenade(bool bShowGrenade);
 	int32 AmountToReload();
+
 private:
 
 	ABlasterCharacter* Character;

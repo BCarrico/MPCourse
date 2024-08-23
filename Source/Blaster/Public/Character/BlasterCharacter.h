@@ -51,6 +51,7 @@ public:
 	FORCEINLINE UCombatComponent* GetCombatComponent() const {return Combat;};
 	FORCEINLINE bool GetDisableGameplay() const {return bDisableGameplay;}
 	FORCEINLINE UAnimMontage* GetReloadMontage() const {return ReloadMontage;}
+	FORCEINLINE UStaticMeshComponent* GetAttachedGrenade() const {return AttachedGrenade;}
 	ECombatState GetCombatState() const;
 	AWeapon* GetEquippedWeapon();
 	void PlayFireMontage(bool bAiming);
@@ -203,4 +204,9 @@ private:
 
 	UPROPERTY()
 	ABlasterPlayerState* BlasterPlayerState;
+
+	// Grenade
+
+	UPROPERTY(VisibleAnywhere)
+	UStaticMeshComponent* AttachedGrenade;
 };
