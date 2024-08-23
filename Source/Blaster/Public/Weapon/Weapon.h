@@ -76,6 +76,10 @@ public:
 	void SetHUDAmmo();
 	bool IsEmpty();
 	bool IsFull();
+
+	// Enable or disable custom depth
+
+	void EnableCustomDepth(bool bEnable);
 protected:
 	virtual void BeginPlay() override;
 
