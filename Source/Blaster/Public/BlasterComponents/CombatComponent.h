@@ -63,6 +63,8 @@ public:
 
 	UFUNCTION(Server, Reliable)
 	void ServerLaunchGrenade(const FVector_NetQuantize& Target);
+
+	void PickupAmmo(EWeaponType WeaponType, int32 AmmoAmount);
 protected:
 	virtual void BeginPlay() override;
 	
@@ -87,6 +89,8 @@ protected:
 	void HandleReload(); // For both servers and clients
 	void ShowAttachedGrenade(bool bShowGrenade);
 	int32 AmountToReload();
+
+
 
 private:
 
@@ -171,6 +175,9 @@ private:
 	UPROPERTY(EditAnywhere)
 	int32 StartinGrenadeLauncherAmmo = 0;
 
+	UPROPERTY(EditAnywhere)
+	int32 MaxCarriedAmmo = 500;
+	
 	UPROPERTY(ReplicatedUsing = OnRep_Grenades)
 	int32 Grenades = 4;
 
