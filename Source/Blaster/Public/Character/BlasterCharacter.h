@@ -10,6 +10,7 @@
 #include "BlasterCharacter.generated.h"
 
 
+class UBuffComponent;
 enum class ECombatState : uint8;
 class ABlasterPlayerState;
 class UTimelineComponent;
@@ -87,6 +88,9 @@ protected:
 	
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	UCombatComponent* Combat;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	UBuffComponent* Buff;
 	
 	UFUNCTION()
 	void ReceiveDamage(AActor* DamagedActor, float Damage, const UDamageType* DamageType, class AController* InstigatorController, AActor* DamageCauser);

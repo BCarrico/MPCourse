@@ -4,6 +4,7 @@
 #include "Character/BlasterCharacter.h"
 #include "Sound/SoundCue.h"
 #include "Blaster/Blaster.h"
+#include "BlasterComponents/BuffComponent.h"
 #include "BlasterComponents/CombatComponent.h"
 #include "BlasterTypes/TurningInPlace.h"
 #include "Camera/CameraComponent.h"
@@ -44,7 +45,9 @@ ABlasterCharacter::ABlasterCharacter()
 
 	Combat = CreateDefaultSubobject<UCombatComponent>("CombatComponent");
 	Combat->SetIsReplicated(true);  // Components do not need to be registered in GetLifetimeReplicatedProps
-
+	Buff = CreateDefaultSubobject<UBuffComponent>("BuffComponent");
+	Buff->SetIsReplicated(true);  // Components do not need to be registered in GetLifetimeReplicatedProps
+	
 	GetCharacterMovement()->NavAgentProps.bCanCrouch = true;
 	GetCapsuleComponent()->SetCollisionResponseToChannel(ECC_Camera, ECR_Ignore);
 	GetMesh()->SetCollisionObjectType(ECC_SkeletalMesh);
@@ -82,6 +85,10 @@ void ABlasterCharacter::PostInitializeComponents()
 	if (Combat)
 	{
 		Combat->Character = this;
+	}
+	if (Buff)
+	{
+		Buff->Character = this;
 	}
 }
 
