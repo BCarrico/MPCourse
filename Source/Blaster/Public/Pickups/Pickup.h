@@ -43,4 +43,11 @@ private:
 
 	UPROPERTY(EditAnywhere)
 	UNiagaraSystem* PickupEffect;
+
+	FTimerHandle BindOverlapTimer;
+
+	UPROPERTY(EditAnywhere)
+	float BindOverlapTime = 0.25f;
+
+	void BindOverlapTimerFinished();
 };
