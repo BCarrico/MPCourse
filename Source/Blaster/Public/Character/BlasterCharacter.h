@@ -48,18 +48,20 @@ public:
 	FORCEINLINE bool ShouldRotateRootBone() const {return bRotateRootBone;}
 	FORCEINLINE bool IsEliminated() const {return bEliminated;}
 	FORCEINLINE float GetHealth() const {return Health;}
+	FORCEINLINE void SetHealth(float Amount) { Health = Amount;}
 	FORCEINLINE float GetMaxHealth() const {return MaxHealth;}
 	FORCEINLINE UCombatComponent* GetCombatComponent() const {return Combat;};
 	FORCEINLINE bool GetDisableGameplay() const {return bDisableGameplay;}
 	FORCEINLINE UAnimMontage* GetReloadMontage() const {return ReloadMontage;}
 	FORCEINLINE UStaticMeshComponent* GetAttachedGrenade() const {return AttachedGrenade;}
+	FORCEINLINE UBuffComponent* GetBuff() const {return Buff;}
 	ECombatState GetCombatState() const;
 	AWeapon* GetEquippedWeapon();
 	void PlayFireMontage(bool bAiming);
 	void PlayElimMontage();
 	void PlayReloadMontage();
 	void PlayThrowGrenadeMontage();
-
+	void UpdateHudHealth();
 	UFUNCTION(BlueprintImplementableEvent)
 	void ShowSniperScopeWidget(bool bShowScope);
 	
@@ -81,7 +83,7 @@ protected:
 	void SimProxiesTurn();
 	virtual void Jump() override;
 	void PlayHitReactMontage();
-	void UpdateHudHealth();
+	
 	
 	// Poll for any relevant classes and initialize our HUD
 	void PollInit();
@@ -164,7 +166,7 @@ private:
 	ABlasterPlayerController* BlasterPlayerController;
 
 	UFUNCTION()
-	void OnRep_Health();
+	void OnRep_Health(float LastHealth);
 
 	bool bEliminated = false;
 

@@ -6,6 +6,8 @@
 #include "GameFramework/Actor.h"
 #include "Pickup.generated.h"
 
+class UNiagaraComponent;
+class UNiagaraSystem;
 class USphereComponent;
 
 UCLASS()
@@ -35,4 +37,10 @@ private:
 	
 	UPROPERTY(EditAnywhere)
 	USoundCue* PickupSound;
+
+	UPROPERTY(VisibleAnywhere)
+	UNiagaraComponent* PickupEffectComponent;
+
+	UPROPERTY(EditAnywhere)
+	UNiagaraSystem* PickupEffect;
 };
