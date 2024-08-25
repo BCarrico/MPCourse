@@ -61,7 +61,8 @@ public:
 	void PlayElimMontage();
 	void PlayReloadMontage();
 	void PlayThrowGrenadeMontage();
-	void UpdateHudHealth();
+	void UpdateHUDHealth();
+	void UpdateHUDShield();
 	UFUNCTION(BlueprintImplementableEvent)
 	void ShowSniperScopeWidget(bool bShowScope);
 	
@@ -161,12 +162,22 @@ private:
 
 	UPROPERTY(ReplicatedUsing= OnRep_Health, VisibleAnywhere, Category="Player Stats")
 	float Health = 100.f;
-
-	UPROPERTY()
-	ABlasterPlayerController* BlasterPlayerController;
-
+	
 	UFUNCTION()
 	void OnRep_Health(float LastHealth);
+
+	// Player Shield
+	UPROPERTY(EditAnywhere, Category="Player Stats")
+	float MaxShield = 100.f;
+
+	UPROPERTY(ReplicatedUsing= OnRep_Shield, VisibleAnywhere, Category="Player Stats")
+	float Shield = 100.f;
+
+	UFUNCTION()
+	void OnRep_Shield(float LastShield);
+	
+	UPROPERTY()
+	ABlasterPlayerController* BlasterPlayerController;
 
 	bool bEliminated = false;
 
