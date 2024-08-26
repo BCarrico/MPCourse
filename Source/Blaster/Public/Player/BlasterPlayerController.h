@@ -46,11 +46,14 @@ protected:
 	virtual void Tick(float DeltaSeconds) override;
 	virtual void BeginPlay() override;
 	void CheckTimeSync(float DeltaSeconds);
+	void CheckPing(float DeltaSeconds);
 	virtual void SetupInputComponent() override;
 	void SetHUDTime();
 	void PollInit();
 	void HandleMatchHasStarted();
 	void HandleCooldown();
+	void HighPingWarning();
+	void StopHighPingWarning();
 	// Sync Time between Client and Server
 
 	UFUNCTION(Server, Reliable) // Requests the current Server time, passing in the Client's time when the request was sent
@@ -155,5 +158,14 @@ private:
 	float HUDCarriedAmmo;
 	bool bInitializeWeaponAmmo = false;
 	float HUDWeaponAmmo;
+
+	float HighPingRunningTime = 0.f;
+	UPROPERTY(EditAnywhere)
+	float HighPingDuration = 5.f;
+	UPROPERTY(EditAnywhere)
+	float CheckPingFrequency = 20.f;
+	UPROPERTY(EditAnywhere)
+	float HighPingThreshold = 50.f;
+	float PingAnimationRunningTime = 0.f;
 
 };

@@ -94,7 +94,6 @@ protected:
 	void SimProxiesTurn();
 	virtual void Jump() override;
 	void PlayHitReactMontage();
-
 	
 	// Poll for any relevant classes and initialize our HUD
 	void PollInit();
