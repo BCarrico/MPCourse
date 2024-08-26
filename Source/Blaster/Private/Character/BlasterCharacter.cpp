@@ -233,19 +233,37 @@ void ABlasterCharacter::SpawnDefaultWeapon()
 	}
 }
 
-void ABlasterCharacter::Elim() // Only on server
+void ABlasterCharacter::DropOrDestroyWeapon(AWeapon* Weapon)
 {
-	if (Combat && Combat->EquippedWeapon)
+	if (Weapon == nullptr) return;
+	if (Weapon->bDestroyWeapon)
 	{
-		if (Combat->EquippedWeapon->bDestroyWeapon)
+		Weapon->Destroy();
+	}
+	else
+	{
+		Weapon->Dropped();
+	}
+}
+
+void ABlasterCharacter::DropOrDestroyWeapons()
+{
+	if (Combat)
+	{
+		if (Combat->EquippedWeapon)
 		{
-			Combat->EquippedWeapon->Destroy();
+			DropOrDestroyWeapon(Combat->EquippedWeapon);
 		}
-		else
+		if (Combat->SecondaryWeapon)
 		{
-			Combat->EquippedWeapon->Dropped();
+			DropOrDestroyWeapon(Combat->SecondaryWeapon);
 		}
 	}
+}
+
+void ABlasterCharacter::Elim() // Only on server
+{
+	DropOrDestroyWeapons();
 	MulticastElim();
 	GetWorldTimerManager().SetTimer(ElimTimer, this, &ABlasterCharacter::ElimTimerFinished, ElimDelay);
 }

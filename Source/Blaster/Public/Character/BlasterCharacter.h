@@ -70,7 +70,9 @@ public:
 	UFUNCTION(BlueprintImplementableEvent)
 	void ShowSniperScopeWidget(bool bShowScope);
 	void SpawnDefaultWeapon();
-	
+	void DropOrDestroyWeapon(AWeapon* Weapon);
+	void DropOrDestroyWeapons();
+
 	UFUNCTION(NetMulticast, Reliable)
 	void MulticastElim();
 
