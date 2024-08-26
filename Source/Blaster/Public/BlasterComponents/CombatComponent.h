@@ -36,6 +36,8 @@ public:
 	void ReloadEmptyWeapon();
 	void EquipPrimaryWeapon(AWeapon* WeaponToEquip);
 	void EquipWeapon(AWeapon* WeaponToEquip);
+	void SwapWeapons();
+	bool ShouldSwapWeapons();
 	void SetAiming(bool bIsAiming);
 	void Fire();
 	void FireButtonPressed(bool bIsFiring);

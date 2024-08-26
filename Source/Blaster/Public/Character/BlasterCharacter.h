@@ -80,6 +80,9 @@ public:
 
 	UPROPERTY(Replicated)
 	bool bDisableGameplay = false;
+
+	UFUNCTION(Server, Reliable)
+	void ServerEquipButtonPressed();
 protected:
 	
 	virtual void BeginPlay() override;
@@ -133,8 +136,7 @@ private:
 	UPROPERTY(EditAnywhere, Category="Combat")
 	UAnimMontage* ThrowGrenadeMontage;
 
-	UFUNCTION(Server, Reliable)
-	void ServerEquipButtonPressed();
+	
 	
 	UFUNCTION()
 	void OnRep_OverlappingWeapon(AWeapon* LastWeapon); // Rep notifies can only have input parameter of the type of variable being replicated

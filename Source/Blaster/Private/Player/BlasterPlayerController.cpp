@@ -539,7 +539,7 @@ void ABlasterPlayerController::EquipButtonPressed()
 		if (ABlasterCharacter* BlasterCharacter = Cast<ABlasterCharacter>(ControlledPawn))
 		{
 			if (BlasterCharacter->bDisableGameplay) return;
-			BlasterCharacter->EquipWeapon();
+			BlasterCharacter->ServerEquipButtonPressed();
 		}
 	}
 }
