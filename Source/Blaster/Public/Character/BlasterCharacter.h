@@ -66,8 +66,10 @@ public:
 	void PlayThrowGrenadeMontage();
 	void UpdateHUDHealth();
 	void UpdateHUDShield();
+	void UpdateHUDAmmo();
 	UFUNCTION(BlueprintImplementableEvent)
 	void ShowSniperScopeWidget(bool bShowScope);
+	void SpawnDefaultWeapon();
 	
 	UFUNCTION(NetMulticast, Reliable)
 	void MulticastElim();
@@ -87,7 +89,7 @@ protected:
 	void SimProxiesTurn();
 	virtual void Jump() override;
 	void PlayHitReactMontage();
-	
+
 	
 	// Poll for any relevant classes and initialize our HUD
 	void PollInit();
@@ -229,4 +231,9 @@ private:
 
 	UPROPERTY(VisibleAnywhere)
 	UStaticMeshComponent* AttachedGrenade;
+
+	// Default Weapon
+
+	UPROPERTY(EditAnywhere)
+	TSubclassOf<AWeapon> DefaultWeaponClass;
 };
