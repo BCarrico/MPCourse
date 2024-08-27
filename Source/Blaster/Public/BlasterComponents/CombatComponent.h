@@ -69,6 +69,8 @@ public:
 	void ServerLaunchGrenade(const FVector_NetQuantize& Target);
 
 	void PickupAmmo(EWeaponType WeaponType, int32 AmmoAmount);
+	void LocalFire(const FVector_NetQuantize& TraceHitTarget);
+
 protected:
 	virtual void BeginPlay() override;
 	
