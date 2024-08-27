@@ -40,6 +40,9 @@ public:
 	bool ShouldSwapWeapons();
 	void SetAiming(bool bIsAiming);
 	void Fire();
+	void FireProjectileWeapon();
+	void FireHitScanWeapon();
+	void FireShotgun();
 	void FireButtonPressed(bool bIsFiring);
 	void Reload();
 	void ThrowGrenade();
