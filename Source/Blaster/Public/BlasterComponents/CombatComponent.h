@@ -73,7 +73,7 @@ public:
 
 	void PickupAmmo(EWeaponType WeaponType, int32 AmmoAmount);
 	void LocalFire(const FVector_NetQuantize& TraceHitTarget);
-
+	void LocalShotgunFire(const TArray<FVector_NetQuantize>& TraceHitTargets);
 protected:
 	virtual void BeginPlay() override;
 	
@@ -89,6 +89,12 @@ protected:
 	UFUNCTION(Server, Reliable)
 	void ServerFire(const FVector_NetQuantize& TraceHitTarget);
 
+	UFUNCTION(Server, Reliable)
+	void ServerShotgunFire(const TArray<FVector_NetQuantize>& TraceHitTargets);
+
+	UFUNCTION(NetMulticast, Reliable)
+	void MulticastShotgunFire(const TArray<FVector_NetQuantize>& TraceHitTargets);
+	
 	UFUNCTION(NetMulticast, Reliable)
 	void MulticastFire(const FVector_NetQuantize& TraceHitTarget);
 
