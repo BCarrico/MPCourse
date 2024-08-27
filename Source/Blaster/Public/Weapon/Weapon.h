@@ -108,6 +108,14 @@ protected:
 	virtual void OnSphereOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
 	UFUNCTION()
 	virtual void OnSphereEndOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
+
+	// Trace end with scatter
+
+	UPROPERTY(EditAnywhere, Category="Weapon Scatter")
+	float DistanceToSphere = 800.f;
+
+	UPROPERTY(EditAnywhere, Category="Weapon Scatter")
+	float SphereRadius = 75.f;
 private:
 	UPROPERTY()
 	ABlasterCharacter* BlasterOwnerCharacter;
@@ -160,12 +168,6 @@ private:
 	UPROPERTY(EditAnywhere)
 	float ZoomInterpSpeed = 20.f;
 
-	// Trace end with scatter
 
-	UPROPERTY(EditAnywhere, Category="Weapon Scatter")
-	float DistanceToSphere = 800.f;
-
-	UPROPERTY(EditAnywhere, Category="Weapon Scatter")
-	float SphereRadius = 75.f;
 
 };
