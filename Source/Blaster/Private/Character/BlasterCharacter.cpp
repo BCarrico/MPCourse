@@ -261,6 +261,12 @@ void ABlasterCharacter::DropOrDestroyWeapons()
 	}
 }
 
+bool ABlasterCharacter::IsLocallyReloading()
+{
+	if (Combat == nullptr) return false;
+	return Combat->bLocallyReloading;
+}
+
 void ABlasterCharacter::Elim() // Only on server
 {
 	DropOrDestroyWeapons();

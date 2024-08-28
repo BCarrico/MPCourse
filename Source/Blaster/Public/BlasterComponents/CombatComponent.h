@@ -74,6 +74,7 @@ public:
 	void PickupAmmo(EWeaponType WeaponType, int32 AmmoAmount);
 	void LocalFire(const FVector_NetQuantize& TraceHitTarget);
 	void LocalShotgunFire(const TArray<FVector_NetQuantize>& TraceHitTargets);
+	bool bLocallyReloading = false;
 protected:
 	virtual void BeginPlay() override;
 	
