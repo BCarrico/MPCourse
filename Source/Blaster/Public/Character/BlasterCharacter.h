@@ -10,6 +10,8 @@
 #include "BlasterCharacter.generated.h"
 
 
+class ULagCompensationComponent;
+class UBoxComponent;
 class UBuffComponent;
 enum class ECombatState : uint8;
 class ABlasterPlayerState;
@@ -87,6 +89,62 @@ public:
 
 	UFUNCTION(Server, Reliable)
 	void ServerEquipButtonPressed();
+
+	// Hit boxes used for server-side rewind
+	UPROPERTY(EditAnywhere)
+	UBoxComponent* head;
+
+	UPROPERTY(EditAnywhere)
+	UBoxComponent* pelvis;
+
+	UPROPERTY(EditAnywhere)
+	UBoxComponent* spine_02;
+
+	UPROPERTY(EditAnywhere)
+	UBoxComponent* spine_03;
+
+	UPROPERTY(EditAnywhere)
+	UBoxComponent* upperarm_l;
+
+	UPROPERTY(EditAnywhere)
+	UBoxComponent* upperarm_r;
+
+	UPROPERTY(EditAnywhere)
+	UBoxComponent* lowerarm_l;
+
+	UPROPERTY(EditAnywhere)
+	UBoxComponent* lowerarm_r;
+
+	UPROPERTY(EditAnywhere)
+	UBoxComponent* hand_l;
+
+	UPROPERTY(EditAnywhere)
+	UBoxComponent* hand_r;
+
+	UPROPERTY(EditAnywhere)
+	UBoxComponent* backpack;
+	
+	UPROPERTY(EditAnywhere)
+	UBoxComponent* blanket;
+
+	UPROPERTY(EditAnywhere)
+	UBoxComponent* thigh_l;
+
+	UPROPERTY(EditAnywhere)
+	UBoxComponent* thigh_r;
+
+	UPROPERTY(EditAnywhere)
+	UBoxComponent* calf_l;
+	
+	UPROPERTY(EditAnywhere)
+	UBoxComponent* calf_r;
+
+	UPROPERTY(EditAnywhere)
+	UBoxComponent* foot_l;
+
+	UPROPERTY(EditAnywhere)
+	UBoxComponent* foot_r;
+	
 protected:
 	
 	virtual void BeginPlay() override;
@@ -99,12 +157,17 @@ protected:
 	
 	// Poll for any relevant classes and initialize our HUD
 	void PollInit();
+
+	// Blaster Components
 	
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	UCombatComponent* Combat;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	UBuffComponent* Buff;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	ULagCompensationComponent* LagCompensation;
 	
 	UFUNCTION()
 	void ReceiveDamage(AActor* DamagedActor, float Damage, const UDamageType* DamageType, class AController* InstigatorController, AActor* DamageCauser);
