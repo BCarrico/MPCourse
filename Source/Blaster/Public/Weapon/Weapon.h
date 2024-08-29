@@ -53,6 +53,7 @@ public:
 	FORCEINLINE EWeaponType GetWeaponType() const {return WeaponType;}
 	FORCEINLINE int32 GetAmmo() const {return Ammo;}
 	FORCEINLINE int32 GetMagCapacity() const {return MagCapacity;}
+	FORCEINLINE float GetDamage() const {return Damage;}
 	void AddAmmo(int32 AmmoToAdd);
 	FVector TraceEndWithScatter(const FVector& HitTarget);
 	// Textures for the weapon crosshairs
@@ -116,12 +117,20 @@ protected:
 
 	UPROPERTY(EditAnywhere, Category="Weapon Scatter")
 	float SphereRadius = 75.f;
-private:
+
+	UPROPERTY(EditAnywhere)
+	float Damage = 20.f;
+
+	UPROPERTY(EditAnywhere)
+	bool bUserServerSideRewind = false;
+
 	UPROPERTY()
 	ABlasterCharacter* BlasterOwnerCharacter;
 	
 	UPROPERTY()
 	ABlasterPlayerController* BlasterOwnerController;
+	
+private:
 	
 	UPROPERTY(VisibleAnywhere, Category="Weapon Properties")
 	USkeletalMeshComponent* WeaponMesh;

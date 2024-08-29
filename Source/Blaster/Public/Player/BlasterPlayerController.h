@@ -42,6 +42,8 @@ public:
 	void SetHUDAnnouncementCountdown(float CountdownTime);
 	void OnMatchStateSet(FName State);
 
+	float SingleTripTime = 0.f;
+	virtual float GetServerTime(); // Synced with server world clock
 protected:
 	virtual void Tick(float DeltaSeconds) override;
 	virtual void BeginPlay() override;
@@ -69,7 +71,7 @@ protected:
 
 	float TimeSyncRunningTime = 0.f;
 	
-	virtual float GetServerTime(); // Synced with server world clock
+	
 	virtual void ReceivedPlayer() override; // Sync with server clock as soon as possible
 
 	UFUNCTION(Server, Reliable)
