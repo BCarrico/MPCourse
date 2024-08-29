@@ -78,6 +78,9 @@ public:
 
 	UFUNCTION(Server, Reliable)
 	void ServerScoreRequest(ABlasterCharacter* HitCharacter, const FVector_NetQuantize& TraceStart, const FVector_NetQuantize& HitLocation, float HitTime, AWeapon* DamageCauser);
+	
+	UFUNCTION(Server, Reliable)
+	void ShotgunServerScoreRequest(const TArray<ABlasterCharacter*>& HitCharacters, const FVector_NetQuantize& TraceStart, const TArray<FVector_NetQuantize>& HitLocations, float HitTime, AWeapon* DamageCauser);
 protected:
 	virtual void BeginPlay() override;
 	void SaveFramePackage(FFramePackage& Package);
@@ -92,6 +95,7 @@ protected:
 	// Shotgun
 	FShotgunServerSideRewingResult ShotgunServerSideRewind(const TArray<ABlasterCharacter*>& HitCharacters, const FVector_NetQuantize& TraceStart, const TArray<FVector_NetQuantize>& HitLocations, float HitTime);
 	FShotgunServerSideRewingResult ShotgunConfirmHit(const TArray<FFramePackage>& FramePackages, const FVector_NetQuantize& TraceStart, const TArray<FVector_NetQuantize>& HitLocations);
+	
 private:
 	UPROPERTY()
 	ABlasterCharacter* Character;
