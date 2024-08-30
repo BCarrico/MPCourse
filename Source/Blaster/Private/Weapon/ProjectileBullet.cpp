@@ -3,8 +3,10 @@
 
 #include "Weapon/ProjectileBullet.h"
 #include "GameFramework/ProjectileMovementComponent.h"
-#include "GameFramework/Character.h"
+#include "Blaster/Public/Character/BlasterCharacter.h"
+#include "BlasterComponents/LagCompensationComponent.h"
 #include "Kismet/GameplayStatics.h"
+#include "Player/BlasterPlayerController.h"
 
 AProjectileBullet::AProjectileBullet()
 {
@@ -34,12 +36,22 @@ void AProjectileBullet::PostEditChangeProperty(FPropertyChangedEvent& PropertyCh
 
 void AProjectileBullet::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalInpulse, const FHitResult& Hit)
 {
-	ACharacter* OwnerCharacter = Cast<ACharacter>(GetOwner());
+	ABlasterCharacter* OwnerCharacter = Cast<ABlasterCharacter>(GetOwner());
 	if (OwnerCharacter)
 	{
-		if (AController* OwnerController = OwnerCharacter->Controller)
+		if (ABlasterPlayerController* OwnerController = Cast<ABlasterPlayerController>(OwnerCharacter->Controller))
 		{
-			UGameplayStatics::ApplyDamage(OtherActor, Damage, OwnerController, this, UDamageType::StaticClass());
+			if (OwnerCharacter->HasAuthority() && !bUseServerSideRewind)
+			{
+				UGameplayStatics::ApplyDamage(OtherActor, Damage, OwnerController, this, UDamageType::StaticClass());
+				Super::OnHit(HitComp, OtherActor, OtherComp, NormalInpulse, Hit);
+				return;
+			}
+			ABlasterCharacter* HitCharacter = Cast<ABlasterCharacter>(OtherActor);
+			if (bUseServerSideRewind && OwnerCharacter->GetLagCompensation() && OwnerCharacter->IsLocallyControlled() && HitCharacter)
+			{
+				OwnerCharacter->GetLagCompensation()->ProjectileServerScoreRequest(HitCharacter, TraceStart, InitialVelocity, OwnerController->GetServerTime() - OwnerController->SingleTripTime);
+			}
 		}
 	}
 	Super::OnHit(HitComp, OtherActor, OtherComp, NormalInpulse, Hit);
@@ -48,6 +60,7 @@ void AProjectileBullet::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, 
 void AProjectileBullet::BeginPlay()
 {
 	Super::BeginPlay();
+	/*
 	FPredictProjectilePathParams PathParams;
 	PathParams.bTraceWithChannel = true;
 	PathParams.bTraceWithCollision = true;
@@ -61,5 +74,5 @@ void AProjectileBullet::BeginPlay()
 	PathParams.TraceChannel = ECC_Visibility;
 	PathParams.ActorsToIgnore.Add(this);
 	FPredictProjectilePathResult PathResult;
-	UGameplayStatics::PredictProjectilePath(this, PathParams, PathResult);
+	UGameplayStatics::PredictProjectilePath(this, PathParams, PathResult);*/
 }

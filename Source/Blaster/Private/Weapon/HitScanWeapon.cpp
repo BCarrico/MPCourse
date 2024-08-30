@@ -17,7 +17,8 @@ void AHitScanWeapon::Fire(const FVector& HitTarget)
 	APawn* OwnerPawn = Cast<APawn>(GetOwner());
 	if (OwnerPawn == nullptr) return;
 	AController* InstigatorController = OwnerPawn->GetController();
-	
+
+	// TODO: Assault Rifle not behaving with HitScan???? Pistol works great.
 		
 	const USkeletalMeshSocket* MuzzleFlashSocket = GetWeaponMesh()->GetSocketByName("MuzzleFlash");
 	if (MuzzleFlashSocket)
@@ -31,7 +32,8 @@ void AHitScanWeapon::Fire(const FVector& HitTarget)
 		{
 			if (InstigatorController)
 			{
-				if (HasAuthority() && !bUserServerSideRewind)
+				bool bCauseAuthDamage = !bUserServerSideRewind || OwnerPawn->IsLocallyControlled();
+				if (HasAuthority() && bCauseAuthDamage)
 				{
 					UGameplayStatics::ApplyDamage(BlasterCharacter, Damage, InstigatorController, this, UDamageType::StaticClass());
 				}
