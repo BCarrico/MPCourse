@@ -56,6 +56,11 @@ public:
 	
 	UFUNCTION(BlueprintCallable)
 	void FinishReloading();
+	UFUNCTION(BlueprintCallable)
+	void FinishSwap();
+	UFUNCTION(BlueprintCallable)
+	void FinishSwapAttachWeapons();
+	
 	void UpdateAmmoValues();
 	void UpdateShotgunAmmoValues();
 	void JumpToShotgunEnd();
@@ -75,6 +80,9 @@ public:
 	void LocalFire(const FVector_NetQuantize& TraceHitTarget);
 	void LocalShotgunFire(const TArray<FVector_NetQuantize>& TraceHitTargets);
 	bool bLocallyReloading = false;
+
+	UPROPERTY(ReplicatedUsing=OnRep_CombatState)
+	ECombatState CombatState = ECombatState::ECS_Unoccupied;
 protected:
 	virtual void BeginPlay() override;
 	
@@ -110,6 +118,8 @@ protected:
 	int32 AmountToReload();
 
 	void EquipSecondaryWeapon(AWeapon* WeaponToEquip);
+
+	
 private:
 	UPROPERTY()
 	ABlasterCharacter* Character;
@@ -218,8 +228,7 @@ private:
 	void UpdateHUDGrenades();
 	void InitializeCarriedAmmo();
 
-	UPROPERTY(ReplicatedUsing=OnRep_CombatState)
-	ECombatState CombatState = ECombatState::ECS_Unoccupied;
+
 
 	UFUNCTION()
 	void OnRep_CombatState();

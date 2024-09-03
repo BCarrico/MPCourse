@@ -606,7 +606,13 @@ void ABlasterPlayerController::EquipButtonPressed()
 		if (ABlasterCharacter* BlasterCharacter = Cast<ABlasterCharacter>(ControlledPawn))
 		{
 			if (BlasterCharacter->bDisableGameplay) return;
-			BlasterCharacter->ServerEquipButtonPressed();
+			if (BlasterCharacter->GetCombatComponent()->CombatState == ECombatState::ECS_Unoccupied) BlasterCharacter->ServerEquipButtonPressed();
+			if (BlasterCharacter->GetCombatComponent()->ShouldSwapWeapons() && !HasAuthority() && BlasterCharacter->GetCombatComponent()->CombatState == ECombatState::ECS_Unoccupied && BlasterCharacter->OverlappingWeapon == nullptr)
+			{
+				BlasterCharacter->PlaySwapMontage();
+				BlasterCharacter->GetCombatComponent()->CombatState = ECombatState::ECS_SwappingWeapons;
+				BlasterCharacter->bFinishedSwapping = false;
+			}
 		}
 	}
 }

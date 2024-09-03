@@ -63,10 +63,14 @@ public:
 	FORCEINLINE ULagCompensationComponent* GetLagCompensation() const {return LagCompensation;}
 	ECombatState GetCombatState() const;
 	AWeapon* GetEquippedWeapon();
+
+	// Play Montages
 	void PlayFireMontage(bool bAiming);
 	void PlayElimMontage();
 	void PlayReloadMontage();
 	void PlayThrowGrenadeMontage();
+	void PlaySwapMontage();
+	
 	void UpdateHUDHealth();
 	void UpdateHUDShield();
 	void UpdateHUDAmmo();
@@ -147,6 +151,11 @@ public:
 
 	UPROPERTY()
 	TMap<FName, UBoxComponent*> HitCollisionBoxes;
+
+	UPROPERTY(ReplicatedUsing = OnRep_OverlappingWeapon) // Creates a replicated variable, calls OnRep_OverlappingWeapon when changed.
+	AWeapon* OverlappingWeapon;
+
+	bool bFinishedSwapping;
 protected:
 	
 	virtual void BeginPlay() override;
@@ -183,8 +192,7 @@ private:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = true))
 	UWidgetComponent* OverheadWidget;
 
-	UPROPERTY(ReplicatedUsing = OnRep_OverlappingWeapon) // Creates a replicated variable, calls OnRep_OverlappingWeapon when changed.
-	AWeapon* OverlappingWeapon;
+
 
 	
 
@@ -203,6 +211,9 @@ private:
 
 	UPROPERTY(EditAnywhere, Category="Combat")
 	UAnimMontage* ThrowGrenadeMontage;
+
+	UPROPERTY(EditAnywhere, Category="Combat")
+	UAnimMontage* SwapMontage;
 
 	
 	
