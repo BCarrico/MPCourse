@@ -7,6 +7,7 @@
 #include "Player/BlasterPlayerController.h"
 #include "BlasterGameMode.generated.h"
 
+class ABlasterPlayerState;
 class ABlasterPlayerController;
 class ABlasterCharacter;
 
@@ -27,6 +28,7 @@ public:
 	virtual void Tick(float DeltaSeconds) override;
 	virtual void PlayerEliminated(ABlasterCharacter* EliminatedCharacter, ABlasterPlayerController* VictimController, ABlasterPlayerController* AttackerController);
 	virtual void RequestRespawn(ACharacter* ElimintedCharacter, AController* EliminatedController);
+	void PlayerLeftGame(ABlasterPlayerState* PlayerLeaving);
 	FORCEINLINE float GetLevelStartingTime() const {return LevelStartingTime;}
 	FORCEINLINE float GetCountdownTime() const {return CountdownTime;}
 	UPROPERTY(EditDefaultsOnly)

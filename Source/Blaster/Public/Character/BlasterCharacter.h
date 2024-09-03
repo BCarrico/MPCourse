@@ -24,6 +24,7 @@ class UWidgetComponent;
 class UCameraComponent;
 class USpringArmComponent;
 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnLeftGame);
 UCLASS()
 class BLASTER_API ABlasterCharacter : public ACharacter, public IInteractWithCrosshairsInterface
 {
@@ -82,9 +83,9 @@ public:
 
 	bool IsLocallyReloading();
 	UFUNCTION(NetMulticast, Reliable)
-	void MulticastElim();
+	void MulticastElim(bool bPlayerLeftGame);
 
-	void Elim();
+	void Elim(bool bPlayerLeftGame);
 	
 	FVector GetHitTarget() const;
 
@@ -156,6 +157,10 @@ public:
 	AWeapon* OverlappingWeapon;
 
 	bool bFinishedSwapping;
+
+	UFUNCTION(Server, Reliable)
+	void ServerLeaveGame();
+	FOnLeftGame OnLeftGame;
 protected:
 	
 	virtual void BeginPlay() override;
@@ -273,6 +278,9 @@ private:
 	float ElimDelay = 3.f;
 	
 	void ElimTimerFinished();
+	bool bLeftGame = false;
+
+
 
 	// Dissolve Effect
 	UPROPERTY(VisibleAnywhere)
