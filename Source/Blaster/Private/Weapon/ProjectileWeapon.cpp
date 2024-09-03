@@ -25,7 +25,7 @@ void AProjectileWeapon::Fire(const FVector& HitTarget)
 
 		AProjectile* SpawnedProjectile = nullptr;
 		
-		if (bUserServerSideRewind)
+		if (bUseServerSideRewind)
 		{
 			if (InstigatorPawn->HasAuthority()) // Server
 			{

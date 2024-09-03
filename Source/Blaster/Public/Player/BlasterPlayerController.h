@@ -14,6 +14,8 @@ class ABlasterHUD;
 struct FInputActionValue;
 class UInputMappingContext;
 class UInputAction;
+
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FHighPingDelegate, bool, bPingTooHigh);
 /**
  * 
  */
@@ -44,6 +46,8 @@ public:
 
 	float SingleTripTime = 0.f;
 	virtual float GetServerTime(); // Synced with server world clock
+
+	FHighPingDelegate HighPingDelegate;
 protected:
 	virtual void Tick(float DeltaSeconds) override;
 	virtual void BeginPlay() override;
@@ -166,6 +170,10 @@ private:
 	float HighPingDuration = 5.f;
 	UPROPERTY(EditAnywhere)
 	float CheckPingFrequency = 20.f;
+
+	UFUNCTION(Server, Reliable)
+	void ServerReportPingStatus(bool bHighPing);
+	
 	UPROPERTY(EditAnywhere)
 	float HighPingThreshold = 50.f;
 	float PingAnimationRunningTime = 0.f;

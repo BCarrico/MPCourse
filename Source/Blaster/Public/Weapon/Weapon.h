@@ -110,6 +110,8 @@ protected:
 	UFUNCTION()
 	virtual void OnSphereEndOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
 
+	UFUNCTION()
+	void OnPingTooHigh(bool bPingTooHigh);
 	// Trace end with scatter
 
 	UPROPERTY(EditAnywhere, Category="Weapon Scatter")
@@ -121,8 +123,8 @@ protected:
 	UPROPERTY(EditAnywhere)
 	float Damage = 20.f;
 
-	UPROPERTY(EditAnywhere)
-	bool bUserServerSideRewind = false;
+	UPROPERTY(Replicated, EditAnywhere)
+	bool bUseServerSideRewind = false;
 
 	UPROPERTY()
 	ABlasterCharacter* BlasterOwnerCharacter;
