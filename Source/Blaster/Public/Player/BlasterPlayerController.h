@@ -7,6 +7,7 @@
 #include "GameFramework/PlayerController.h"
 #include "BlasterPlayerController.generated.h"
 
+class UReturnToMainMenu;
 class ABlasterCharacter;
 class ABlasterGameMode;
 class UCharacterOverlay;
@@ -83,7 +84,18 @@ protected:
 
 	UFUNCTION(Client, Reliable)
 	void ClientJoinMidGame(FName StateOfMatch, float Warmup, float Match, float StartingTime, float Cooldown);
+
+	void ShowReturnToMainMenu();
 private:
+	// Return To Main Menu
+	UPROPERTY(EditAnywhere, Category= HUD)
+	TSubclassOf<UUserWidget> ReturnToMainMenuWidget;
+	
+	UPROPERTY()
+	UReturnToMainMenu* ReturnToMainMenu;
+
+	bool bReturnToMainMenuOpen = false;
+	
 	FTimerHandle ElimMessageTimer;
 	
 	UPROPERTY()
@@ -119,6 +131,9 @@ private:
 	UPROPERTY(EditAnywhere, Category="Input")
 	TObjectPtr<UInputAction> ThrowGrenadeAction;
 
+	UPROPERTY(EditAnywhere, Category="Input")
+	TObjectPtr<UInputAction> QuitAction;
+
 	void Move(const FInputActionValue& InputActionValue);
 	void Look(const FInputActionValue& InputActionValue);
 	void JumpButtonPressed();
@@ -128,6 +143,7 @@ private:
 	void FireButtonPressed(const FInputActionValue& InputActionValue);
 	void ReloadButtonPressed();
 	void ThrowGrenadeButtonPressed();
+	void QuitActionPressed();
 
 	float LevelStartingTime = 0.f;
 	float MatchTime = 0.f;

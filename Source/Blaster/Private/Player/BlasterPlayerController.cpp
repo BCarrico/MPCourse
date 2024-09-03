@@ -17,6 +17,7 @@
 #include "Game/BlasterGameMode.h"
 #include "GameState/BlasterGameState.h"
 #include "HUD/Announcement.h"
+#include "HUD/ReturnToMainMenu.h"
 #include "Kismet/GameplayStatics.h"
 #include "PlayerState/BlasterPlayerState.h"
 
@@ -180,6 +181,27 @@ void ABlasterPlayerController::ReceivedPlayer()
 	if (IsLocalController())
 	{
 		ServerRequestServerTime(GetWorld()->GetTimeSeconds());
+	}
+}
+
+void ABlasterPlayerController::ShowReturnToMainMenu()
+{
+	if (ReturnToMainMenuWidget == nullptr) return;
+	if (ReturnToMainMenu == nullptr)
+	{
+		ReturnToMainMenu = CreateWidget<UReturnToMainMenu>(this, ReturnToMainMenuWidget);
+	}
+	if (ReturnToMainMenu)
+	{
+		bReturnToMainMenuOpen = !bReturnToMainMenuOpen;
+		if (bReturnToMainMenuOpen)
+		{
+			ReturnToMainMenu->MenuSetup();
+		}
+		else
+		{
+			ReturnToMainMenu->MenuTeardown();
+		}
 	}
 }
 
@@ -551,6 +573,7 @@ void ABlasterPlayerController::SetupInputComponent()
 	EnhancedInputComponent->BindAction(FireAction, ETriggerEvent::Triggered, this, &ABlasterPlayerController::FireButtonPressed);
 	EnhancedInputComponent->BindAction(ReloadAction, ETriggerEvent::Triggered, this, &ABlasterPlayerController::ReloadButtonPressed);
 	EnhancedInputComponent->BindAction(ThrowGrenadeAction, ETriggerEvent::Triggered, this, &ABlasterPlayerController::ThrowGrenadeButtonPressed);
+	EnhancedInputComponent->BindAction(QuitAction, ETriggerEvent::Triggered, this, &ABlasterPlayerController::QuitActionPressed);
 }
 
 void ABlasterPlayerController::Move(const FInputActionValue& InputActionValue)
@@ -700,6 +723,11 @@ void ABlasterPlayerController::ThrowGrenadeButtonPressed()
 			}
 		}
 	}
+}
+
+void ABlasterPlayerController::QuitActionPressed()
+{
+	ShowReturnToMainMenu();
 }
 
 
