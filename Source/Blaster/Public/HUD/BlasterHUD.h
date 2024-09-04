@@ -56,6 +56,9 @@ public:
 	void AddCharacterOverlay();
 	void AddAnnouncement();
 	void AddElimAnnouncement(FString Attacker, FString Victim);
+
+	UPROPERTY()
+	TArray<UElimAnnouncement*> ElimMessages;
 protected:
 	virtual void BeginPlay() override;
 	
@@ -71,4 +74,10 @@ private:
 
 	UPROPERTY()
 	APlayerController* OwningPlayer;
+
+	UPROPERTY(EditAnywhere)
+	float ElimAnnouncementTime = 2.5f;
+
+	UFUNCTION()
+	void ElimAnnouncementTimerFinished(UElimAnnouncement* MsgToRemove);
 };
