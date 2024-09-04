@@ -517,7 +517,6 @@ void ABlasterPlayerController::CheckPing(float DeltaSeconds)
 		if (PlayerState == nullptr) PlayerState = GetPlayerState<APlayerState>();
 		if (PlayerState)
 		{
-			UE_LOG(LogTemp, Warning, TEXT("PlayerState->GetPingInMilliseconds: %f"), PlayerState->GetPingInMilliseconds());
 			float CurrentPing = PlayerState->GetPingInMilliseconds();
 			if (CurrentPing > HighPingThreshold)
 			{
