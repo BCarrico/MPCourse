@@ -49,6 +49,8 @@ public:
 	virtual float GetServerTime(); // Synced with server world clock
 
 	FHighPingDelegate HighPingDelegate;
+
+	void BroadcastElim(APlayerState* Attacker, APlayerState* Victim);
 protected:
 	virtual void Tick(float DeltaSeconds) override;
 	virtual void BeginPlay() override;
@@ -86,6 +88,9 @@ protected:
 	void ClientJoinMidGame(FName StateOfMatch, float Warmup, float Match, float StartingTime, float Cooldown);
 
 	void ShowReturnToMainMenu();
+
+	UFUNCTION(Client, Reliable)
+	void ClientElimAnnouncement(APlayerState* Attacker, APlayerState* Victim);
 private:
 	// Return To Main Menu
 	UPROPERTY(EditAnywhere, Category= HUD)

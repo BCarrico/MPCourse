@@ -205,6 +205,44 @@ void ABlasterPlayerController::ShowReturnToMainMenu()
 	}
 }
 
+void ABlasterPlayerController::BroadcastElim(APlayerState* Attacker, APlayerState* Victim)
+{
+	ClientElimAnnouncement(Attacker, Victim);
+}
+
+void ABlasterPlayerController::ClientElimAnnouncement_Implementation(APlayerState* Attacker, APlayerState* Victim)
+{
+	APlayerState* Self = GetPlayerState<APlayerState>();
+	if (Attacker && Victim && Self)
+	{
+		BlasterHUD = BlasterHUD == nullptr ? Cast<ABlasterHUD>(GetHUD()) : BlasterHUD;
+		if (BlasterHUD)
+		{
+			if (Attacker == Self && Victim != Self)
+			{
+				BlasterHUD->AddElimAnnouncement("You", Victim->GetPlayerName());
+				return;
+			}
+			if (Victim == Self && Attacker != Self)
+			{
+				BlasterHUD->AddElimAnnouncement(Attacker->GetPlayerName(), "You");
+				return;
+			}
+			if (Attacker == Victim && Attacker == Self)
+			{
+				BlasterHUD->AddElimAnnouncement("You", "Yourself");
+				return;
+			}
+			if (Attacker == Victim && Attacker != Self)
+			{
+				BlasterHUD->AddElimAnnouncement(Attacker->GetPlayerName(), "Themselves");
+				return;
+			}
+			BlasterHUD->AddElimAnnouncement(Attacker->GetPlayerName(), Victim->GetPlayerName());
+		}
+	}
+}
+
 void ABlasterPlayerController::ServerCheckMatchState_Implementation()
 {
 	ABlasterGameMode* GameMode = Cast<ABlasterGameMode>(UGameplayStatics::GetGameMode(this));
@@ -229,7 +267,7 @@ void ABlasterPlayerController::ClientJoinMidGame_Implementation(FName StateOfMat
 	OnMatchStateSet(MatchState);
 	if (BlasterHUD && MatchState == MatchState::WaitingToStart)
 	{
-		BlasterHUD->AddAnouncement();
+		BlasterHUD->AddAnnouncement();
 	}
 }
 

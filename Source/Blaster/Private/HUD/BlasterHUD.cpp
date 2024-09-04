@@ -2,7 +2,7 @@
 
 
 #include "HUD/BlasterHUD.h"
-
+#include "HUD/ElimAnnouncement.h"
 #include "HUD/Announcement.h"
 #include "HUD/CharacterOverlay.h"
 void ABlasterHUD::DrawHUD()
@@ -58,13 +58,27 @@ void ABlasterHUD::AddCharacterOverlay()
 	}
 }
 
-void ABlasterHUD::AddAnouncement()
+void ABlasterHUD::AddAnnouncement()
 {
 	APlayerController* PlayerController = GetOwningPlayerController();
 	if (PlayerController && AnnoucementOverlayClass)
 	{
 		AnnouncementOverlay = CreateWidget<UAnnouncement>(PlayerController, AnnoucementOverlayClass);
 		AnnouncementOverlay->AddToViewport();
+	}
+}
+
+void ABlasterHUD::AddElimAnnouncement(FString Attacker, FString Victim)
+{
+	OwningPlayer = OwningPlayer == nullptr ? GetOwningPlayerController() : OwningPlayer;
+	if (OwningPlayer && ElimAnnoucementClass)
+	{
+		UElimAnnouncement* ElimAnnouncementWidget = CreateWidget<UElimAnnouncement>(OwningPlayer, ElimAnnoucementClass);
+		if (ElimAnnouncementWidget)
+		{
+			ElimAnnouncementWidget->SetElimAnnouncementText(Attacker, Victim);
+			ElimAnnouncementWidget->AddToViewport();
+		}
 	}
 }
 
