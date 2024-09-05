@@ -7,7 +7,7 @@
 #include "GameFramework/PlayerState.h"
 #include "BlasterPlayerState.generated.h"
 
-enum ETeam : uint8;
+enum class ETeam : uint8;
 class ABlasterPlayerController;
 class ABlasterCharacter;
 /**
@@ -27,7 +27,7 @@ public:
 	void AddToScore(float ScoreAmount);
 	void AddToDefeats(int32 DefeatsAmount);
 	FORCEINLINE ETeam GetTeam() const {return Team;}
-	FORCEINLINE void SetTeam(ETeam TeamToSet) {Team = TeamToSet;}
+	void SetTeam(ETeam TeamToSet);
 private:
 	UPROPERTY()
 	ABlasterCharacter* Character;
@@ -38,7 +38,9 @@ private:
 	UPROPERTY(ReplicatedUsing=OnRep_Defeats)
 	int32 Defeats;
 
-	UPROPERTY(Replicated)
+	UPROPERTY(ReplicatedUsing=OnRep_Team)
 	ETeam Team = ETeam::ET_NoTeam;
 
+	UFUNCTION()
+	void OnRep_Team();
 };

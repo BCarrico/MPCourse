@@ -5,7 +5,7 @@
 #include "CoreMinimal.h"
 
 UENUM(BlueprintType)
-enum ETeam : uint8
+enum class ETeam : uint8
 {
  ET_RedTeam UMETA(DisplayName = "RedTeam"),
  ET_BlueTeam UMETA(DisplayName = "BlueTeam"),

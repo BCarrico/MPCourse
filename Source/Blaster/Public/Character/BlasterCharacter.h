@@ -6,6 +6,7 @@
 #include "BlasterTypes/TurningInPlace.h"
 #include "GameFramework/Character.h"
 #include "Blaster/Public/Interfaces/InteractWithCrosshairsInterface.h"
+#include "BlasterTypes/Team.h"
 #include "Components/TimelineComponent.h"
 #include "BlasterCharacter.generated.h"
 
@@ -169,6 +170,8 @@ public:
 	
 	UFUNCTION(NetMulticast, Reliable)
 	void MulticastLostTheLead();
+
+	void SetTeamColor(ETeam Team);
 protected:
 	
 	virtual void BeginPlay() override;
@@ -236,7 +239,7 @@ private:
 
 	void TurnInPlace(float DeltaTime);
 
-	void HideCameraIfCharacterClose();
+	void HideCharacterIfCameraClose();
 
 	UPROPERTY(EditAnywhere)
 	float CameraThreshold = 200.f;
@@ -307,9 +310,25 @@ private:
 	UMaterialInstanceDynamic* DynamicDissolveMaterialInstance;
 	
 	// Material instance set on the Blueprint, used with dynamic material instance
-	UPROPERTY(EditAnywhere, Category="Elim")
+	UPROPERTY(VisibleAnywhere, Category="Elim")
 	UMaterialInstance* DissolveMaterialInstance;
 
+	// Team Colors
+	UPROPERTY(EditAnywhere, Category="Elim")
+	UMaterialInstance* RedDissolveMatInst;
+	
+	UPROPERTY(EditAnywhere, Category="Elim")
+	UMaterialInstance* RedMaterial;
+	
+	UPROPERTY(EditAnywhere, Category="Elim")
+	UMaterialInstance* BlueDissolveMatInst;
+	
+	UPROPERTY(EditAnywhere, Category="Elim")
+	UMaterialInstance* BlueMaterial;
+
+	UPROPERTY(EditAnywhere, Category="Elim")
+	UMaterialInstance* OriginalMaterial;
+	
 	// Elim effects
 
 	UPROPERTY(EditAnywhere)

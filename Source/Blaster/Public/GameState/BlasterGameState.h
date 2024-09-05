@@ -23,8 +23,8 @@ public:
 	TArray<TObjectPtr<ABlasterPlayerState>> TopScoringPlayers;
 
 	// Teams
-	TArray<ABlasterPlayerState> RedTeam;
-	TArray<ABlasterPlayerState> BlueTeam;
+	TArray<ABlasterPlayerState*> RedTeam;
+	TArray<ABlasterPlayerState*> BlueTeam;
 
 	UPROPERTY(ReplicatedUsing = OnRep_RedTeamScore)
 	float RedTeamScore = 0.f;
