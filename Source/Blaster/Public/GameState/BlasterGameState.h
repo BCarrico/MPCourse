@@ -26,6 +26,9 @@ public:
 	TArray<ABlasterPlayerState*> RedTeam;
 	TArray<ABlasterPlayerState*> BlueTeam;
 
+	void RedTeamScores();
+	void BlueTeamScores();
+	
 	UPROPERTY(ReplicatedUsing = OnRep_RedTeamScore)
 	float RedTeamScore = 0.f;
 
@@ -40,3 +43,5 @@ public:
 private:
 	float TopScore = 0.f;
 };
+
+

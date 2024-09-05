@@ -43,8 +43,12 @@ public:
 	void HideEliminatedMessage();
 	void SetHUDMatchCountdown(float CountdownTime);
 	void SetHUDAnnouncementCountdown(float CountdownTime);
-	void OnMatchStateSet(FName State);
-
+	void OnMatchStateSet(FName State, bool bTeamsMatch = false);
+	void HideTeamScores();
+	void InitTeamScores();
+	void SetHUDRedTeamScore(int32 RedScore);
+	void SetHudBlueTeamScore(int32 BlueScore);
+	
 	float SingleTripTime = 0.f;
 	virtual float GetServerTime(); // Synced with server world clock
 
@@ -59,7 +63,7 @@ protected:
 	virtual void SetupInputComponent() override;
 	void SetHUDTime();
 	void PollInit();
-	void HandleMatchHasStarted();
+	void HandleMatchHasStarted(bool bTeamsMatch = false);
 	void HandleCooldown();
 	void HighPingWarning();
 	void StopHighPingWarning();
@@ -91,6 +95,12 @@ protected:
 
 	UFUNCTION(Client, Reliable)
 	void ClientElimAnnouncement(APlayerState* Attacker, APlayerState* Victim);
+
+	UPROPERTY(ReplicatedUsing=OnRep_ShowTeamScores)
+	bool bShowTeamScores = false;
+	
+	UFUNCTION()
+	void OnRep_ShowTeamScores();
 private:
 	// Return To Main Menu
 	UPROPERTY(EditAnywhere, Category= HUD)
