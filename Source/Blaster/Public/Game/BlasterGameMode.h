@@ -31,6 +31,7 @@ public:
 	void PlayerLeftGame(ABlasterPlayerState* PlayerLeaving);
 	FORCEINLINE float GetLevelStartingTime() const {return LevelStartingTime;}
 	FORCEINLINE float GetCountdownTime() const {return CountdownTime;}
+	virtual float CalculateDamage(AController* Attacker, AController* Victim, float BaseDamage);
 	UPROPERTY(EditDefaultsOnly)
 	float WarmUpTime = 10.f;
 	

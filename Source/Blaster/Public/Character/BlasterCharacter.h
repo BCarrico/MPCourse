@@ -11,6 +11,7 @@
 #include "BlasterCharacter.generated.h"
 
 
+class ABlasterGameMode;
 class UNiagaraComponent;
 class UNiagaraSystem;
 class ULagCompensationComponent;
@@ -291,7 +292,8 @@ private:
 	void ElimTimerFinished();
 	bool bLeftGame = false;
 
-
+	UPROPERTY()
+	ABlasterGameMode* BlasterGameMode;
 
 	// Dissolve Effect
 	UPROPERTY(VisibleAnywhere)
