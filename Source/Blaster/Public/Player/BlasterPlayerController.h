@@ -7,6 +7,8 @@
 #include "GameFramework/PlayerController.h"
 #include "BlasterPlayerController.generated.h"
 
+class ABlasterGameState;
+class ABlasterPlayerState;
 class UReturnToMainMenu;
 class ABlasterCharacter;
 class ABlasterGameMode;
@@ -101,6 +103,9 @@ protected:
 	
 	UFUNCTION()
 	void OnRep_ShowTeamScores();
+
+	FString GetInfoText(const TArray<ABlasterPlayerState*>& Players);
+	FString GetTeamsInfoText(ABlasterGameState* BlasterGameState);
 private:
 	// Return To Main Menu
 	UPROPERTY(EditAnywhere, Category= HUD)

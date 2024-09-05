@@ -88,3 +88,15 @@ float ATeamsGameMode::CalculateDamage(AController* Attacker, AController* Victim
 	
 	
 }
+
+void ATeamsGameMode::PlayerEliminated(ABlasterCharacter* EliminatedCharacter, ABlasterPlayerController* VictimController, ABlasterPlayerController* AttackerController)
+{
+	Super::PlayerEliminated(EliminatedCharacter, VictimController, AttackerController);
+	ABlasterGameState* BGameState = Cast<ABlasterGameState>(UGameplayStatics::GetGameState(this));
+	ABlasterPlayerState* AttackerPState = AttackerController ? Cast<ABlasterPlayerState>(AttackerController->PlayerState) : nullptr;
+	if (BGameState && AttackerPState)
+	{
+		if (AttackerPState->GetTeam() == ETeam::ET_BlueTeam) BGameState->BlueTeamScores();
+		if (AttackerPState->GetTeam() == ETeam::ET_RedTeam) BGameState->RedTeamScores();
+	}
+}
